@@ -14,6 +14,10 @@ Pemeriksaan terakhir: **206 tes dalam 19 suite lulus**, TypeScript lulus, dan al
 
 ## APK mandiri
 
+### Unduh dan pasang
+
+**[Unduh aplikasi Android dari GitHub Releases](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0)**, lalu pilih **DistiLab-1.1.0.apk** pada bagian **Assets**. Buka APK di Android dan izinkan pemasangan dari sumber tersebut jika diminta. Tidak memerlukan Expo Go atau komputer. Repository ini private, jadi unduhan memerlukan akun yang diberi akses. Berkas `SHA256SUMS.txt` tersedia untuk memeriksa integritas unduhan.
+
 **Catatan versi:** tautan APK 1.1.0 di bawah adalah build sebelum redesign lembar kerja; tampilannya tidak sama dengan source terbaru di repository ini.
 
 **APK versi 1.1.0 sudah dibuat dan tanda tangannya telah diverifikasi.** [Unduh APK](https://expo.dev/artifacts/eas/Zv6vuZ9HMZDEetwI88nZWJwcP3Cd9S6_muEYGV2X_vA.apk) atau gunakan [salinan lokal](artifacts/v1.1/DistiLab-1.1.0.apk). Ukuran 102.884.850 byte (sekitar 103 MB); Android 7.0/API 24 atau lebih baru; ARM64, ARMv7, x86, dan x86_64. Package dan kunci penandatanganan sama dengan versi 1.0; versionCode naik menjadi 2.
