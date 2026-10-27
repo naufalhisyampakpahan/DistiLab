@@ -1,5 +1,9 @@
 # APK Android DistiLab
 
+Versi terbaru dengan UI redesign adalah **[DistiLab 1.2.0](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.2.0)**. Unduh DistiLab-1.2.0.apk pada Assets dan pasang sebagai pembaruan. VersionCode 3 dan sertifikat sama dengan 1.1.0. Lihat [laporan rilis 1.2](RELEASE_1_2.md). Belum diuji pada HP fisik.
+
+## Arsip petunjuk build 1.1.0
+
 APK final **DistiLab-1.1.0.apk** telah dibuat pada 21 Oktober 2026 dan tanda tangannya terverifikasi. [Unduh APK](https://expo.dev/artifacts/eas/Zv6vuZ9HMZDEetwI88nZWJwcP3Cd9S6_muEYGV2X_vA.apk) atau gunakan [salinan lokal](../artifacts/v1.1/DistiLab-1.1.0.apk). Package id.distilab.app dan kunci penandatanganan dipertahankan; versionCode 2 untuk pembaruan dari 1.0. Identitas build, checksum, dan hasil pemeriksaan ada di [panduan 1.1](RELEASE_1_1.md). Uji pada HP fisik belum dilakukan.
 
 ## Memasang di HP

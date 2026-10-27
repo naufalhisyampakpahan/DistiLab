@@ -10,19 +10,15 @@ Alur Proses → Data → Hasil, diagram kolom yang dapat disentuh, penahapan int
 
 Source di repository ini membuka **Data kasus** secara langsung. Navigasi utama adalah **Hitung · Studi · Referensi**, dengan Data/Hasil sebagai alur kasus. Ringkasan hasil menyertakan grafik; penjelasan rumus, substitusi, serta audit numerik dapat dibuka sesuai kebutuhan. Tombol hitung berada di bagian bawah layar. Hasil hitung ulang selalu kembali ke ringkasan.
 
-Pemeriksaan terakhir: **206 tes dalam 19 suite lulus**, TypeScript lulus, dan alur browser McCabe–Thiele/FUG diperiksa pada lebar 320 serta 390 px. Ada peringatan `act(...)` pada pengujian StageExplorer. Ekspor bundel web/Android berhasil, tetapi antarmuka terbaru belum dibangun menjadi APK baru atau diuji di HP fisik. Mesin numerik tidak diubah dalam redesign.
+Pemeriksaan terakhir: **206 tes dalam 19 suite lulus**, TypeScript lulus, dan alur browser McCabe–Thiele/FUG diperiksa pada lebar 320 serta 390 px. Ada peringatan `act(...)` pada pengujian StageExplorer. Ekspor bundel web/Android berhasil, APK 1.2.0 berisi antarmuka terbaru sudah tersedia; uji pemakaian di HP fisik belum dilakukan. Mesin numerik tidak diubah dalam redesign.
 
 ## APK mandiri
 
-### Unduh dan pasang
+**[Unduh DistiLab 1.2.0 - UI redesign terbaru](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.2.0)**, lalu pilih **DistiLab-1.2.0.apk** pada bagian **Assets**. Buka di Android 7.0 atau lebih baru dan izinkan pemasangan dari sumber tersebut jika diminta. Tidak memerlukan Expo Go atau komputer. Repository public: APK dapat diunduh siapa saja.
 
-**[Unduh aplikasi Android dari GitHub Releases](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0)**, lalu pilih **DistiLab-1.1.0.apk** pada bagian **Assets**. Buka APK di Android dan izinkan pemasangan dari sumber tersebut jika diminta. Tidak memerlukan Expo Go atau komputer. Repository ini private, jadi unduhan memerlukan akun yang diberi akses. Berkas `SHA256SUMS.txt` tersedia untuk memeriksa integritas unduhan.
+APK 1.2.0 dibuat dari source redesign commit 30da34ad20e1f7e7d52df2f1772b228fb9e01e93. Package id.distilab.app, versionCode 3, dan tanda tangan sama dengan versi 1.1.0. Pasang sebagai pembaruan tanpa menghapus aplikasi lama; ekspor studi penting sebagai cadangan. Tanda tangan, bundle offline, font, library ARM64, ukuran, serta checksum unduhan diperiksa. **Uji pemakaian di HP fisik belum dilakukan.**
 
-**Catatan versi:** tautan APK 1.1.0 di bawah adalah build sebelum redesign lembar kerja; tampilannya tidak sama dengan source terbaru di repository ini.
-
-**APK versi 1.1.0 sudah dibuat dan tanda tangannya telah diverifikasi.** [Unduh APK](https://expo.dev/artifacts/eas/Zv6vuZ9HMZDEetwI88nZWJwcP3Cd9S6_muEYGV2X_vA.apk) atau gunakan [salinan lokal](artifacts/v1.1/DistiLab-1.1.0.apk). Ukuran 102.884.850 byte (sekitar 103 MB); Android 7.0/API 24 atau lebih baru; ARM64, ARMv7, x86, dan x86_64. Package dan kunci penandatanganan sama dengan versi 1.0; versionCode naik menjadi 2.
-
-Untuk penggunaan di HP, ikuti [panduan pemasangan APK](docs/BUILD_ANDROID.md). APK sudah menyertakan kode, font, dan aset; Expo Go atau server komputer tidak diperlukan. Pengujian pemakaian pada HP fisik masih belum dilakukan. SHA-256 dan pemeriksaan APK dicatat dalam [laporan pengujian](docs/STATUS_PENGUJIAN.md).
+Laporan rilis ada di [RELEASE_1_2.md](docs/RELEASE_1_2.md). SHA256SUMS.txt dan laporan verifikasi paket juga tersedia pada Assets. [APK 1.1.0](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0) hanya arsip sebelum redesign; gunakan 1.2.0 untuk tampilan terbaru.
 
 ## Menjalankan source
 
