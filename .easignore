@@ -2,6 +2,8 @@ node_modules/
 .expo/
 coverage/
 dist/
+dist-ui/
+/*.zip
 web-preview/
 artifacts/
 validation-excel/
