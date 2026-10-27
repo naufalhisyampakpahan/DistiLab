@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "DistiLab",
+    "slug": "distilab",
+    "owner": "naufalpakpahan",
+    "version": "1.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "distilab",
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "id.distilab.app",
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#254E70"
+      },
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.VIBRATE"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-sharing",
+      "expo-font"
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5d6be9ae-dbb4-4f68-8473-83498bcaf782"
+      }
+    }
+  }
+}
