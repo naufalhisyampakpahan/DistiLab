@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { router } from "expo-router";
 import { Linking, Pressable, Text } from "react-native";
 import {
   Heading,
-  Button,
   Note,
   Row,
   Screen,
@@ -50,13 +48,6 @@ export default function Methodology() {
         title="Metode & konvensi"
         description="Model ideal untuk perhitungan dan analisis sensitivitas distilasi biner."
       />
-      <Section title="Pemeriksaan referensi">
-        <Button
-          label="Paket verifikasi · 27 kasus"
-          variant="secondary"
-          onPress={() => router.push("/verification")}
-        />
-      </Section>
       <Section title="Profil penelitian 1.1">
         <Note>
           Biner hipotetik A/B, α konstan, CMO, F wajib positif dan umpan cair

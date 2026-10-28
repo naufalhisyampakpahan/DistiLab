@@ -1,5 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useApp } from "../state/AppContext";
 import { colors } from "../theme";
 
@@ -10,22 +11,24 @@ export function WorkflowNav({
 }) {
   const app = useApp();
   const steps = [
-    { id: "data", label: "Data", route: "/" },
+    {
+      id: "process",
+      label: "Proses",
+      icon: "git-branch-outline",
+      route: "/process",
+    },
+    { id: "data", label: "Data", icon: "options-outline", route: "/input" },
     {
       id: "result",
       label: "Hasil",
-      route: "/(tabs)/result",
+      icon: "analytics-outline",
+      route: "/result",
     },
   ] as const;
   return (
     <View
       accessibilityRole="tablist"
-      style={{
-        flexDirection: "row",
-        borderBottomWidth: 1,
-        borderBottomColor: colors.border,
-        marginBottom: 24,
-      }}
+      style={{ flexDirection: "row", gap: 6, marginBottom: 24 }}
     >
       {steps.map((step) => {
         const selected = active === step.id,
@@ -44,19 +47,23 @@ export function WorkflowNav({
               flex: 1,
               minHeight: 52,
               padding: 10,
-              borderBottomWidth: 2,
-              borderBottomColor: selected ? colors.primary : "transparent",
+              borderRadius: 12,
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
               gap: 5,
-              backgroundColor: "transparent",
+              backgroundColor: selected ? colors.primary : colors.surface,
               opacity: disabled ? 0.45 : 1,
             }}
           >
+            <Ionicons
+              name={step.icon}
+              size={18}
+              color={selected ? colors.surface : colors.primary}
+            />
             <Text
               style={{
-                color: selected ? colors.primary : colors.muted,
+                color: selected ? colors.surface : colors.primary,
                 fontSize: 14,
                 fontWeight: "600",
                 flexShrink: 1,

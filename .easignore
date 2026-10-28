@@ -19,3 +19,5 @@ android/local.properties
 credentials.json
 *.jks
 *.keystore.properties
+
+/design/

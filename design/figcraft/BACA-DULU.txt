@@ -1,0 +1,57 @@
+DESAIN DISTILAB UNTUK FIGCRAFT
+28 Oktober 2026
+
+MULAI DI SINI
+Buka DistiLab-Desain.figcraft di FigCraft.
+Halaman 01 berisi sembilan layar aplikasi, overview, dan panduan.
+Halaman 02 berisi palet, tipografi, dan empat komponen reusable.
+
+LAYAR
+01 Beranda
+02 Proses
+03 Data kasus
+04 Hasil
+05 Sensitivitas
+06 Verifikasi
+07 Riwayat
+08 Metodologi
+09 Perbandingan
+
+PROTOTIPE
+Pilih frame 01 Beranda, lalu klik Presentasikan.
+Alur utama: Beranda > Kasus penelitian baru > Proses > Data > Hasil.
+Dari Hasil, buka Sensitivitas atau simpan ke Riwayat.
+Dari Riwayat, buka Perbandingan. Navigasi bawah menghubungkan tiga tab utama.
+64 tautan navigasi tersimpan di file native.
+
+ISI PAKET
+DistiLab-Desain.figcraft         File desain native dengan layer editable
+Pratinjau-Semua-Layar.png        Overview semua layar
+Sistem-Desain.png               Palet, tipografi, dan komponen
+Pratinjau/                      PNG 2x tiap frame
+Kode-desain/                    Kode generator dan skrip perintah FigCraft
+
+CATATAN
+Ini desain dan prototipe navigasi. Isian, pilihan metode, ekspor, dan simpan
+yang terlihat belum menjadi integrasi baru ke kode aplikasi DistiLab.
+Sebagian kontrol visual tidak diberi interaksi pada prototipe ini.
+Data contoh C14 menggunakan model biner hipotetik, alpha konstan, dan q=1.
+Hasil verifikasi ditampilkan sebagai contoh hasil tersimpan, bukan run baru
+atau bukti validasi eksperimen.
+Perhitungan contoh: F=100; zF=0,50; xD=0,95; xB=0,05; alpha=2,50; R=1,65.
+MT N=11,6748, dibulatkan 12 tahap; umpan pada tahap 6.
+Perbandingan R=2,50 memberi N=9,3756, dibulatkan 10 tahap.
+
+VERIFIKASI FILE
+828 node native; dua halaman; empat komponen; tidak ada font hilang.
+Sembilan layar diekspor dan diperiksa secara visual.
+File berhasil dibuka di FigCraft dan tautan Beranda > Proses dicoba di presenter.
+
+MEMBANGUN ULANG DARI SKRIP PERINTAH
+Dari direktori paket ini, jalankan di PowerShell:
+& 'C:\Program Files\FigCraft\figcraft-cli.exe' run '.\Kode-desain\DistiLab-Desain.commands.json' --out '.\DistiLab-Desain-baru.figcraft'
+
+MEMBANGUN ULANG DARI GENERATOR NODE.JS
+$env:DISTILAB_DESIGN_OUT = (Get-Location).Path
+node '.\Kode-desain\build-design.cjs'
+Kemudian jalankan figcraft-cli dengan skrip JSON yang dihasilkan.

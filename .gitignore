@@ -31,3 +31,5 @@ credentials.json
 /*.zip
 __pycache__/
 *.pyc
+/work/
+/outputs/

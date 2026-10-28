@@ -21,17 +21,17 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "DistiLab",
-          tabBarLabel: "Hitung",
+          tabBarLabel: "Beranda",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calculator-outline" color={color} size={size} />
+            <Ionicons name="flask-outline" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
         name="history"
         options={{
-          title: "Studi",
-          tabBarLabel: "Studi",
+          title: "Riwayat studi",
+          tabBarLabel: "Riwayat",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="time-outline" color={color} size={size} />
           ),
@@ -40,14 +40,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="methodology"
         options={{
-          title: "Referensi",
-          tabBarLabel: "Referensi",
+          title: "Informasi & metodologi",
+          tabBarLabel: "Metodologi",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book-outline" color={color} size={size} />
           ),
         }}
       />
-      <Tabs.Screen name="result" options={{ href: null, title: "DistiLab" }} />
     </Tabs>
   );
 }

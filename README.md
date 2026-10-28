@@ -1,32 +1,35 @@
 # DistiLab
 
+## Arsip aplikasi 1.1.0 + desain FigCraft
+
+Cabang ini menyimpan sumber aplikasi **DistiLab 1.1.0 (versionCode 2)** yang ada di proyek lokal, bersama rancangan FigCraft tanggal 28 Oktober 2026. Versi 1.2.0 tetap tersedia di [branch main](https://github.com/naufalhisyampakpahan/DistiLab/tree/main).
+
+- [Unduh APK 1.1.0 dan paket desain](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0). APK yang sudah tersedia identik dengan salinan lokal (SHA-256 2349d23b1d128757c74450e3475315aeb6aaa4c91937757eb845dec17a3e9135).
+- [Buka file desain native](design/figcraft/DistiLab-Desain.figcraft), [lihat sistem desain](design/figcraft/Sistem-Desain.png), atau baca [panduan desain](design/figcraft/BACA-DULU.txt).
+- Sembilan layar dan 64 tautan prototipe. Desain FigCraft belum diterapkan ke UI aplikasi atau APK pada cabang ini.
+
+![Pratinjau sembilan layar DistiLab](design/figcraft/Pratinjau-Semua-Layar.png)
+
+
 Aplikasi Android React Native + Expo untuk perhitungan dan analisis sensitivitas distilasi biner. Semua persamaan dijalankan secara lokal dalam TypeScript. Tidak memerlukan akun, backend, API berbayar, atau mesin Python.
 
 ## Revisi 1.1
 
 Alur Proses → Data → Hasil, diagram kolom yang dapat disentuh, penahapan interaktif, eksplorasi refluks, proyek dan perbandingan skenario, serta paket penelitian 27 kasus dengan ekspor XLSX tersedia. Profil penelitian memakai q=1 dan F positif. Profil umum serta data versi sebelumnya tetap didukung. Lihat [panduan revisi dan bukti pengujian](docs/RELEASE_1_1.md).
 
-## Antarmuka lembar kerja terbaru
-
-Source di repository ini membuka **Data kasus** secara langsung. Navigasi utama adalah **Hitung · Studi · Referensi**, dengan Data/Hasil sebagai alur kasus. Ringkasan hasil menyertakan grafik; penjelasan rumus, substitusi, serta audit numerik dapat dibuka sesuai kebutuhan. Tombol hitung berada di bagian bawah layar. Hasil hitung ulang selalu kembali ke ringkasan.
-
-Pemeriksaan terakhir: **206 tes dalam 19 suite lulus**, TypeScript lulus, dan alur browser McCabe–Thiele/FUG diperiksa pada lebar 320 serta 390 px. Ada peringatan `act(...)` pada pengujian StageExplorer. Ekspor bundel web/Android berhasil, APK 1.2.0 berisi antarmuka terbaru sudah tersedia; uji pemakaian di HP fisik belum dilakukan. Mesin numerik tidak diubah dalam redesign.
-
 ## APK mandiri
 
-**[Unduh DistiLab 1.2.0 - UI redesign terbaru](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.2.0)**, lalu pilih **DistiLab-1.2.0.apk** pada bagian **Assets**. Buka di Android 7.0 atau lebih baru dan izinkan pemasangan dari sumber tersebut jika diminta. Tidak memerlukan Expo Go atau komputer. Repository public: APK dapat diunduh siapa saja.
+**APK versi 1.1.0 sudah dibuat dan tanda tangannya telah diverifikasi.** [Unduh APK](https://expo.dev/artifacts/eas/Zv6vuZ9HMZDEetwI88nZWJwcP3Cd9S6_muEYGV2X_vA.apk) atau gunakan [APK di GitHub Releases](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0). Ukuran 102.884.850 byte (sekitar 103 MB); Android 7.0/API 24 atau lebih baru; ARM64, ARMv7, x86, dan x86_64. Package dan kunci penandatanganan sama dengan versi 1.0; versionCode naik menjadi 2.
 
-APK 1.2.0 dibuat dari source redesign commit 30da34ad20e1f7e7d52df2f1772b228fb9e01e93. Package id.distilab.app, versionCode 3, dan tanda tangan sama dengan versi 1.1.0. Pasang sebagai pembaruan tanpa menghapus aplikasi lama; ekspor studi penting sebagai cadangan. Tanda tangan, bundle offline, font, library ARM64, ukuran, serta checksum unduhan diperiksa. **Uji pemakaian di HP fisik belum dilakukan.**
-
-Laporan rilis ada di [RELEASE_1_2.md](docs/RELEASE_1_2.md). SHA256SUMS.txt dan laporan verifikasi paket juga tersedia pada Assets. [APK 1.1.0](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0) hanya arsip sebelum redesign; gunakan 1.2.0 untuk tampilan terbaru.
+Untuk penggunaan di HP, ikuti [panduan pemasangan APK](docs/BUILD_ANDROID.md). APK sudah menyertakan kode, font, dan aset; Expo Go atau server komputer tidak diperlukan. Pengujian pemakaian pada HP fisik masih belum dilakukan. SHA-256 dan pemeriksaan APK dicatat dalam [laporan pengujian](docs/STATUS_PENGUJIAN.md).
 
 ## Menjalankan source
 
 1. Buka PowerShell atau Terminal.
-2. Masuk ke folder hasil clone atau ekstraksi proyek. Contoh lokasi lokal:
+2. Masuk ke folder aplikasi:
 
    ```powershell
-    cd "C:\Users\levih\Downloads\DistiLab"
+   cd "DistiLab"
    ```
 
 3. Pasang Node.js LTS minimal 22.13, lalu instal dependensi sesuai lockfile:
@@ -42,18 +45,12 @@ Laporan rilis ada di [RELEASE_1_2.md](docs/RELEASE_1_2.md). SHA256SUMS.txt dan l
    ```
 
 5. Buka Expo Go, pilih pemindai QR, lalu pindai kode yang muncul di terminal. Tunggu sampai aplikasi terbuka. Jika jaringan lokal memblokir koneksi, lihat [panduan koneksi Expo](https://docs.expo.dev/get-started/start-developing/).
-6. Aplikasi langsung membuka **Data kasus**. Pilih metode, lalu isi parameter. Di **Pengaturan model & data contoh**, tombol **Isi data demonstrasi** mengisi kasus ideal yang diberi label; angka hasil tetap dihitung oleh mesin.
-7. Tekan **Hitung kolom** untuk membuka ringkasan dan grafik. Buka pembahasan perhitungan atau eksplorasi jika diperlukan, lalu simpan studi atau ekspor CSV. Hasil tersimpan tersedia di **Studi**.
+6. Tekan **Kasus penelitian baru**, buka **Data**, pilih metode, lalu isi parameter. Tombol **Isi data demonstrasi** mengisi kasus ideal yang diberi label; angka hasil tetap dihitung oleh mesin.
+7. Di hasil, buka **Grafik** atau **Perhitungan**, jalankan sensitivitas, lalu simpan studi atau ekspor CSV. Riwayat berada di tab bawah.
 
 Jika PowerShell memblokir `npm.ps1`, gunakan `npm.cmd start`, `npm.cmd ci`, dan seterusnya; tidak perlu mengubah kebijakan komputer. Untuk menghentikan server, tekan Ctrl+C di terminal.
 
 Pratinjau pengembangan browser dapat dibuka dengan `npm run web`. Pemuatan bundle pertama dapat memerlukan beberapa menit. Untuk pratinjau dari bundle yang sudah dibuat, jalankan `npm run export:web`, lalu `npm run preview`, dan buka `http://127.0.0.1:8082`. Browser menggunakan kode React Native yang sama, tetapi pemeriksaan browser tidak menggantikan pengujian Android.
-
-### Isi repository dan berkas lokal
-
-Repository menyimpan source, tes, dokumentasi, aset, lockfile, dan proyek native Android. `node_modules`, bundel hasil ekspor, coverage, artefak pengujian, ZIP sumber, serta kredensial tidak disertakan. Jalankan `npm run check` untuk memeriksa TypeScript dan tes; hasil ekspor dibuat ulang dengan perintah di atas. Tautan ke berkas dalam `artifacts/` pada dokumentasi lama merujuk bukti lokal yang tidak disertakan di Git.
-
-Keystore tidak disimpan di Git. Untuk build native lokal, sediakan debug keystore sendiri di `android/app/debug.keystore` mengikuti panduan React Native/Android. Untuk rilis produksi, gunakan kunci penandatanganan sendiri atau kredensial EAS; jangan memakai konfigurasi debug sebagai kunci produksi dan jangan commit kunci tersebut.
 
 ## Fitur perhitungan
 
@@ -164,3 +161,9 @@ Status perintah, jumlah tes aktual, pemeriksaan UI, dan keterbatasan lingkungan 
 - [Expo SDK 57](https://docs.expo.dev/versions/v57.0.0/) dan [instalasi Expo Router](https://docs.expo.dev/router/installation/): kompatibilitas SDK dan navigasi.
 
 Penjelasan pemilihan persamaan, ketelitian, dan rancangan pengembangan multikomponen terdapat dalam dokumentasi metodologi.
+
+## Isi cabang dan build lokal
+
+Sumber, tes, lockfile, dokumentasi, aset, proyek Android, dan desain tersedia di Git. Cache, node_modules, hasil build, log, kredensial, serta kunci penandatanganan tidak disertakan. Tautan artefak lokal dalam dokumentasi lama adalah catatan bukti pengembangan; unduhan yang tersedia di GitHub berada di halaman rilis.
+
+Keystore tidak disimpan di Git. Build Android lokal memerlukan debug keystore pengembangan sendiri di `android/app/debug.keystore`; build rilis memakai kredensial EAS yang dikelola pemilik. Folder `design/` dikecualikan dari upload EAS agar dokumen desain tidak masuk paket build aplikasi.

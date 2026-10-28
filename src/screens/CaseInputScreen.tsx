@@ -1,17 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Alert,
-  Keyboard,
-  Platform,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { Keyboard, ScrollView, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Button,
-  ChoiceGroup,
-  Disclosure,
   Field,
   Heading,
   Note,
@@ -38,23 +29,6 @@ export default function CaseInputScreen() {
     );
   const scrollRef = useRef<ScrollView>(null);
   const positions = useRef<Record<string, number>>({});
-  const hadResult = useRef(Boolean(app.result));
-  const [needsRecalculation, setNeedsRecalculation] = useState(false);
-  useEffect(() => {
-    if (app.result) setNeedsRecalculation(false);
-    else if (hadResult.current) setNeedsRecalculation(true);
-    hadResult.current = Boolean(app.result);
-  }, [app.result]);
-  const confirmReplace = (message: string, apply: () => void) => {
-    if (Platform.OS === "web") {
-      if (globalThis.confirm(message)) apply();
-    } else {
-      Alert.alert("Ganti data aktif?", message, [
-        { text: "Batal", style: "cancel" },
-        { text: "Ganti data", onPress: apply },
-      ]);
-    }
-  };
   const focus =
     params.section === "feed"
       ? "feed"
@@ -92,6 +66,12 @@ export default function CaseInputScreen() {
   };
   const fieldError = (key: keyof Fields) =>
     submitted || touched[key] ? errors[key] : undefined;
+  const status = (keys: (keyof Fields)[]) =>
+    keys.every((key) => !errors[key])
+      ? "Lengkap"
+      : keys.some((key) => app.fields[key].trim() !== "")
+        ? "Periksa / lengkapi"
+        : "Belum diisi";
   const groupStyle = (name: string) =>
     focus === name
       ? { borderLeftWidth: 3, borderLeftColor: colors.accent, paddingLeft: 12 }
@@ -116,7 +96,7 @@ export default function CaseInputScreen() {
     try {
       app.compute();
       setError("");
-      router.replace("/(tabs)/result");
+      router.replace("/result");
     } catch (e) {
       setError(
         e instanceof Error
@@ -126,51 +106,51 @@ export default function CaseInputScreen() {
     }
   };
   return (
-    <Screen
-      scrollRef={scrollRef}
-      footer={
-        <Button label="Hitung kolom" disabled={!app.ready} onPress={run} />
-      }
-    >
-      <Heading title={app.caseId ?? "Data kasus"} />
+    <Screen scrollRef={scrollRef}>
+      <Heading
+        eyebrow="DATA KASUS"
+        title="Siapkan pemisahan"
+        description="Fraksi mol komponen ringan. Isian menerima titik atau koma desimal."
+      />
       <WorkflowNav active="data" />
       {app.storageError && <Note error>{app.storageError}</Note>}
-      <ChoiceGroup
-        label="Metode"
-        value={app.method}
-        options={[
-          { value: "mccabe", label: "McCabe–Thiele" },
-          { value: "fug", label: "FUG" },
-        ]}
-        onChange={(method) => {
-          app.setMethod(method);
-          setError("");
-        }}
-      />
-      <Text style={[styles.caption, { marginVertical: 12 }]}>
-        {app.profile === "research"
-          ? "Penelitian · q = 1 · F wajib · maksimal 60 tahap"
-          : "Umum · 0 ≤ q ≤ 1"}{" "}
-        · α konstan / CMO
-      </Text>
-      <Disclosure title="Pengaturan model & data contoh">
-        <ChoiceGroup
-          label="Profil perhitungan"
-          value={app.profile}
-          options={[
-            { value: "research", label: "Penelitian · q = 1" },
-            { value: "general", label: "Umum · q = 0…1" },
-          ]}
-          onChange={(profile) => {
-            app.setProfile(profile);
-            setError("");
-          }}
-        />
+      <Section title="Profil dan model">
+        <View style={styles.horizontal}>
+          <Button
+            label="Penelitian · q = 1"
+            variant={app.profile === "research" ? "primary" : "secondary"}
+            onPress={() => {
+              app.setProfile("research");
+              setError("");
+            }}
+          />
+          <Button
+            label="Umum · q = 0…1"
+            variant={app.profile === "general" ? "primary" : "secondary"}
+            onPress={() => {
+              app.setProfile("general");
+              setError("");
+            }}
+          />
+        </View>
         <Note>
           {app.profile === "research"
             ? "Biner hipotetik A/B · α konstan · CMO · cair jenuh (q=1). F wajib positif. Maksimum 60 langkah MT."
             : "Model umum α konstan/CMO dengan q=0…1. Data dan riwayat dari versi sebelumnya tetap dapat digunakan."}
         </Note>
+        <View style={styles.horizontal}>
+          {(["mccabe", "fug"] as const).map((method) => (
+            <Button
+              key={method}
+              label={method === "mccabe" ? "McCabe–Thiele" : "FUG"}
+              variant={app.method === method ? "primary" : "secondary"}
+              onPress={() => {
+                app.setMethod(method);
+                setError("");
+              }}
+            />
+          ))}
+        </View>
         <Text style={styles.caption}>
           {methodName(app.method)} · {app.caseId ?? "Kasus mandiri"}
         </Text>
@@ -180,41 +160,12 @@ export default function CaseInputScreen() {
           icon="flask-outline"
           disabled={!app.ready}
           onPress={() => {
-            const apply = () => {
-              app.demo();
-              setDemoUsed(true);
-              setSubmitted(false);
-              setTouched({});
-              setError("");
-            };
-            if (
-              ["zF", "xD", "xB", "alpha", "R"].some((key) =>
-                app.fields[key as keyof Fields].trim(),
-              )
-            ) {
-              confirmReplace(
-                "Data contoh akan mengganti parameter kasus ini. Lanjutkan?",
-                apply,
-              );
-            } else apply();
+            app.demo();
+            setDemoUsed(true);
+            setSubmitted(false);
+            setTouched({});
+            setError("");
           }}
-        />
-        <Button
-          label="Kosongkan kasus"
-          variant="quiet"
-          onPress={() =>
-            confirmReplace(
-              "Kosongkan parameter kasus aktif? Studi yang sudah disimpan tidak dihapus.",
-              () => {
-                app.newCase(app.profile);
-                setDemoUsed(false);
-                setSubmitted(false);
-                setTouched({});
-                setError("");
-                setNeedsRecalculation(false);
-              },
-            )
-          }
         />
         {demoUsed && (
           <Text style={styles.caption}>
@@ -222,21 +173,23 @@ export default function CaseInputScreen() {
             Hitung ditekan.
           </Text>
         )}
-      </Disclosure>
+      </Section>
       <View
-        style={[{ marginTop: 12 }, groupStyle("composition")]}
+        style={groupStyle("composition")}
         onLayout={(event) => {
           positions.current.composition = event.nativeEvent.layout.y;
         }}
       >
-        <Section title="Komposisi komponen ringan">
+        <Section
+          title={`01 · Campuran dan target — ${status(["zF", "xD", "xB"])}`}
+        >
           <Field
             label="Umpan"
             symbol="zF · mol/mol"
             value={app.fields.zF}
             onChange={(v) => change("zF", v)}
             error={fieldError("zF")}
-            help="Fraksi mol, bukan persen: 0,5 berarti 50%. Urutan: 0 < xB < zF < xD < 1."
+            help="0 < xB < zF < xD < 1"
           />
           <Field
             label="Distilat"
@@ -260,7 +213,9 @@ export default function CaseInputScreen() {
           positions.current.feed = event.nativeEvent.layout.y;
         }}
       >
-        <Section title="Umpan">
+        <Section
+          title={`02 · Umpan — ${status(["q", ...(app.profile === "research" || app.fields.F.trim() ? ["F" as const] : [])])}`}
+        >
           <Field
             label="Fraksi cair umpan"
             symbol="q · tanpa satuan"
@@ -295,7 +250,9 @@ export default function CaseInputScreen() {
           positions.current.operation = event.nativeEvent.layout.y;
         }}
       >
-        <Section title="Kesetimbangan & operasi">
+        <Section
+          title={`03 · Kesetimbangan dan operasi — ${status(["alpha", "R"])}`}
+        >
           <Field
             label="Volatilitas relatif"
             symbol="α · tanpa satuan"
@@ -314,7 +271,7 @@ export default function CaseInputScreen() {
           />
           {rmin !== null && (
             <Text style={styles.caption}>
-              Rmin dari model ≈ {fmt(rmin, 4)}. Nilai ini dihitung dari input
+              Rmin dari model: {fmt(rmin, 8)}. Nilai ini dihitung dari input
               aktif.
             </Text>
           )}
@@ -322,12 +279,6 @@ export default function CaseInputScreen() {
       </View>
       <View style={{ gap: 12 }}>
         {error && <Note error>{error}</Note>}
-        {needsRecalculation && (
-          <Note>
-            Data berubah · perlu dihitung ulang. Hasil sebelumnya tidak
-            ditampilkan untuk parameter baru.
-          </Note>
-        )}
         {app.result && (
           <Note>
             Hasil tersedia untuk input ini. Mengubah angka akan menandai hasil
@@ -335,8 +286,14 @@ export default function CaseInputScreen() {
           </Note>
         )}
         <Button
+          label="Hitung kolom"
+          icon="calculator-outline"
+          disabled={!app.ready}
+          onPress={run}
+        />
+        <Button
           label="Lihat diagram proses"
-          variant="quiet"
+          variant="secondary"
           icon="git-branch-outline"
           onPress={() => router.replace("/process")}
         />

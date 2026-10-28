@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { fenske } from "../src/calculations";
 import { calculateWithProfile } from "../src/research/profile";
 import { StageExplorer } from "../src/components/StageExplorer";
 import { RefluxExplorer } from "../src/components/RefluxExplorer";
 import { WorkflowNav } from "../src/components/WorkflowNav";
-import { CalculationWalkthrough } from "../src/components/CalculationWalkthrough";
 import {
   Button,
-  Disclosure,
   Empty,
   Field,
   Heading,
@@ -27,7 +25,7 @@ import { colors } from "../src/theme";
 import { ASSUMPTIONS, ENGINE_VERSION } from "../src/types";
 import { calculationCSV } from "../src/utils/csv";
 import { shareCSV } from "../src/utils/export";
-import { dateTime, exact, fmt } from "../src/utils/format";
+import { dateTime, exact, fmt, methodName } from "../src/utils/format";
 export default function Result() {
   const app = useApp(),
     r = app.result;
@@ -40,7 +38,6 @@ export default function Result() {
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   useEffect(() => {
-    setTab("summary");
     setSelectedStage(1);
     setError("");
     setNotice("");
@@ -70,7 +67,10 @@ export default function Result() {
           title="Hasil belum tersedia"
           description="Isi parameter dan jalankan perhitungan untuk melihat hasil."
         />
-        <Button label="Buka parameter" onPress={() => router.replace("/")} />
+        <Button
+          label="Buka parameter"
+          onPress={() => router.replace("/input")}
+        />
       </Screen>
     );
   const action = async (fn: () => Promise<void>, success: string) => {
@@ -89,63 +89,84 @@ export default function Result() {
   return (
     <Screen>
       <Heading
-        title={`Hasil · ${r.method === "mccabe" ? "McCabe–Thiele" : "FUG"}`}
+        eyebrow={methodName(r.method)}
+        title="Hasil perhitungan"
+        description={`${dateTime(app.computedAt)} · mesin ${app.resultEngineVersion} · ${app.profile === "research" ? "profil penelitian q=1" : "profil umum"}`}
       />
       <WorkflowNav active="result" />
-      {tab !== "summary" && (
-        <Button
-          label="Kembali ke ringkasan"
-          variant="quiet"
-          onPress={() => setTab("summary")}
-        />
-      )}
-      {tab === "summary" && (
-        <>
-          <View
-            style={[
-              {
-                marginBottom: 24,
-                gap: 6,
-              },
-            ]}
+      <View
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          borderBottomWidth: 1,
+          borderBottomColor: colors.border,
+          marginBottom: 20,
+        }}
+      >
+        {(
+          [
+            ["summary", "Ringkasan"],
+            ["chart", "Grafik"],
+            ["steps", "Perhitungan"],
+            ["explore", "Eksplorasi"],
+          ] as const
+        ).map(([key, label]) => (
+          <Pressable
+            key={key}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: tab === key }}
+            onPress={() => setTab(key)}
+            style={{
+              flex: 1,
+              minWidth: 75,
+              minHeight: 48,
+              alignItems: "center",
+              justifyContent: "center",
+              borderBottomWidth: 2,
+              borderBottomColor: tab === key ? colors.accent : "transparent",
+            }}
           >
             <Text
-              selectable
               style={{
-                fontSize: 36,
-                fontWeight: "700",
-                color: colors.text,
-                fontVariant: ["tabular-nums"],
+                fontSize: 14,
+                fontWeight: tab === key ? "600" : "400",
+                color: tab === key ? colors.primary : colors.muted,
               }}
             >
-              {r.Nceil}
-              <Text style={{ fontSize: 18 }}> tahap teoritis bulat</Text>
+              {label}
             </Text>
-            <Text style={styles.body}>
-              N hasil model ≈ {fmt(r.N, 4)} · pembulatan ke atas.
-            </Text>
+          </Pressable>
+        ))}
+      </View>
+      {tab === "summary" && (
+        <>
+          <View style={[styles.panel, { marginBottom: 24 }]}>
+            <View style={styles.horizontal}>
+              <Metric
+                label="Tahap teoritis · N"
+                value={fmt(r.N, 4)}
+                unit="tahap"
+              />
+              <Metric
+                label="Tahap yang diperlukan"
+                value={String(r.Nceil)}
+                unit="tahap"
+              />
+            </View>
             <Text style={styles.caption}>
-              Setara {Math.max(0, r.Nceil - 1)} tray teoritis + 1 reboiler.
-              Kondensor total tidak dihitung. Jumlah tray aktual memerlukan
-              efisiensi tray, yang belum dimodelkan.
+              Termasuk 1 reboiler kesetimbangan; total condenser tidak dihitung.
+              Kebutuhan tray teoritis bulat: {Math.max(0, r.Nceil - 1)}.
             </Text>
           </View>
-          <View style={{ marginBottom: 16 }}>
-            <Row label="Refluks operasi · R" value={fmt(r.input.R, 4)} />
-            <Row label="Refluks minimum · Rmin" value={fmt(r.Rmin, 4)} />
-            <Text style={styles.caption}>
-              Perhitungan konvergen pada model yang dipilih. Ini bukan jaminan
-              kelayakan kolom nyata.
-            </Text>
-          </View>
-          <Section title="Informasi utama">
+          <Section title="Batas & kondisi operasi">
+            <Row label="Refluks minimum · Rmin" value={fmt(r.Rmin, 6)} />
+            <Row label="Refluks operasi · R" value={fmt(r.input.R)} />
             {r.method === "fug" ? (
               <>
                 <Row label="Tahap minimum · Nmin" value={fmt(r.Nmin, 6)} />
-                <Text style={styles.body}>
-                  FUG memperkirakan jumlah tahap dengan korelasi; posisi tahap
-                  umpan tidak dihitung oleh metode ini.
-                </Text>
+                <Row label="Akar Underwood · θ" value={fmt(r.theta, 8)} />
+                <Row label="Gilliland · X" value={fmt(r.X, 8)} />
+                <Row label="Gilliland · Y" value={fmt(r.Y, 8)} />
               </>
             ) : (
               <>
@@ -157,66 +178,44 @@ export default function Result() {
                       : `${r.feedStage} dari puncak`
                   }
                 />
+                <Row
+                  label="Titik pinch · (x, y)"
+                  value={`(${fmt(r.pinch.x)}, ${fmt(r.pinch.y)})`}
+                />
               </>
             )}
+            <Row
+              label="Status numerik"
+              value={`Konvergen · ${r.convergence.iterations} iterasi`}
+            />
+            <Row
+              label="Toleransi algoritma"
+              value={String(r.convergence.tolerance)}
+            />
           </Section>
-          <Section
-            title={
-              r.method === "mccabe" ? "Diagram x–y" : "Kurva tahap operasi"
-            }
-          >
-            <Button
-              label="Perbesar grafik"
-              variant="quiet"
-              onPress={() => setTab("chart")}
-            />
-            {r.method === "mccabe" ? (
-              <StageExplorer
-                result={r}
-                selectedStage={selectedStage}
-                onStageSelect={setSelectedStage}
-              />
-            ) : (
-              <FUGGraph result={r} />
-            )}
-          </Section>
-          <View style={{ gap: 8, marginBottom: 20 }}>
-            <Button
-              label="Perhitungan"
-              variant="secondary"
-              onPress={() => setTab("steps")}
-            />
-            <Button
-              label="Eksplorasi"
-              variant="quiet"
-              onPress={() => setTab("explore")}
-            />
-          </View>
           {r.balance && (
             <Section title="Neraca massa">
               <Row
                 label="Umpan · F"
-                value={`${fmt(r.input.F ?? 0, 2)} kmol/jam`}
+                value={`${fmt(r.input.F ?? 0)} kmol/jam`}
               />
               <Row
                 label="Distilat · D"
-                value={`${fmt(r.balance.D, 2)} kmol/jam`}
+                value={`${fmt(r.balance.D)} kmol/jam`}
               />
               <Row
                 label="Produk bawah · B"
-                value={`${fmt(r.balance.B, 2)} kmol/jam`}
+                value={`${fmt(r.balance.B)} kmol/jam`}
               />
-              <Text style={styles.caption}>
-                F = D + B. Komposisi dinyatakan sebagai fraksi mol, bukan
-                persen.
-              </Text>
+              <Row
+                label="Residual neraca total"
+                value={r.balance.totalResidual.toExponential(3)}
+              />
+              <Row
+                label="Residual komponen ringan"
+                value={r.balance.componentResidual.toExponential(3)}
+              />
             </Section>
-          )}
-          {!r.balance && (
-            <Note>
-              Laju umpan F tidak diisi. Karena itu, aliran distilat D dan produk
-              bawah B tidak ditampilkan.
-            </Note>
           )}
           <Section title="Perbandingan pada input yang sama">
             {app.resultEngineVersion !== ENGINE_VERSION && (
@@ -229,7 +228,7 @@ export default function Result() {
             )}
             {comparison?.result ? (
               <>
-                <View>
+                <View style={styles.horizontal}>
                   <Metric
                     label="McCabe–Thiele"
                     value={fmt(
@@ -253,11 +252,11 @@ export default function Result() {
               <Note>{comparison?.error}</Note>
             )}
           </Section>
-          <Disclosure title="Parameter yang digunakan · presisi penuh">
+          <Section title="Parameter yang digunakan">
             {(["zF", "xD", "xB", "q", "alpha", "R"] as const).map((key) => (
               <Row
                 key={key}
-                label={inputLabels[key]}
+                label={key === "alpha" ? "α" : key}
                 value={exact(r.input[key])}
               />
             ))}
@@ -265,7 +264,7 @@ export default function Result() {
               label="F (kmol/jam)"
               value={r.input.F === undefined ? "Tidak diisi" : exact(r.input.F)}
             />
-          </Disclosure>
+          </Section>
         </>
       )}
       {tab === "chart" && (
@@ -290,7 +289,39 @@ export default function Result() {
       {tab === "steps" && (
         <>
           <Section title="Persamaan & substitusi">
-            <CalculationWalkthrough result={r} />
+            <Note>{`y = αx / [1 + (α − 1)x]\nα = ${fmt(r.input.alpha)}; x = y / [α − (α − 1)y]\nD/F = (zF − xB)/(xD − xB) = ${fmt((r.input.zF - r.input.xB) / (r.input.xD - r.input.xB), 6)}`}</Note>
+            {r.method === "mccabe" ? (
+              <>
+                <Text
+                  selectable
+                  style={styles.body}
+                >{`Rectifying: y = ${fmt(r.rectifying.slope, 6)}x + ${fmt(r.rectifying.intercept, 6)}\nStripping: y = ${fmt(r.stripping.slope, 6)}x + (${fmt(r.stripping.intercept, 6)})\nq-line (bentuk stabil): qx + (1−q)y = zF\n${exact(r.input.q)}x + (${exact(1 - r.input.q)})y = ${exact(r.input.zF)}\nPerpotongan: (${fmt(r.intersection.x, 6)}, ${fmt(r.intersection.y, 6)})`}</Text>
+                {r.RminPinch !== undefined && (
+                  <Row
+                    label="R dari feed pinch (mentah)"
+                    value={fmt(r.RminPinch, 6)}
+                  />
+                )}
+                {r.Rflow !== undefined && (
+                  <Row
+                    label="Batas R dari aliran stripping"
+                    value={fmt(r.Rflow, 6)}
+                  />
+                )}
+                <Text style={styles.caption}>
+                  Rmin fisik = max(0, Rpinch, Rflow). Langkah terakhir
+                  diinterpolasi secara linear pada arah horizontal; nilai
+                  pecahan merupakan konvensi grafis.
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text
+                  selectable
+                  style={styles.body}
+                >{`Fenske:\nNmin = ln[(xD/(1−xD))((1−xB)/xB)] / ln α\n= ln[(${fmt(r.input.xD)}/${fmt(1 - r.input.xD)})(${fmt(1 - r.input.xB)}/${fmt(r.input.xB)})] / ln ${fmt(r.input.alpha)}\n= ${fmt(r.Nmin, 8)}\n\nUnderwood:\nαzF/(α−θ) + (1−zF)/(1−θ) = 1−q\n${fmt(r.input.alpha * r.input.zF)}/(${fmt(r.input.alpha)}−θ) + ${fmt(1 - r.input.zF)}/(1−θ) = ${fmt(1 - r.input.q)}\n1 < θ < α; bisection → θ = ${fmt(r.theta, 8)}\nRmin = αxD/(α−θ) + (1−xD)/(1−θ) − 1\n= ${fmt(r.Rmin, 8)}\n\nGilliland–Molokanov:\nX = (R−Rmin)/(R+1) = ${fmt(r.X, 8)}\nY = 1−exp{[(1+54.4X)/(11+117.2X)]·[(X−1)/√X]}\nY = ${fmt(r.Y, 8)}\nN = (Nmin+Y)/(1−Y) = ${fmt(r.N, 8)}`}</Text>
+              </>
+            )}
           </Section>
           {r.method === "mccabe" && (
             <Section title="Langkah per tahap">
@@ -329,62 +360,7 @@ export default function Result() {
           />
         </Section>
       )}
-      <Disclosure title="Detail numerik & ketelitian">
-        <Text
-          style={styles.caption}
-        >{`${dateTime(app.computedAt)} · mesin ${app.resultEngineVersion} · ${app.profile === "research" ? "profil penelitian q=1" : "profil umum"}`}</Text>
-        <Note>
-          Angka ringkasan dibulatkan agar mudah dibaca. Nilai mesin berikut dan
-          ekspor mempertahankan presisi penuh; galat pembulatan tampilan tidak
-          dipakai untuk menghitung ulang hasil.
-        </Note>
-        <Row label="N sebelum pembulatan" value={exact(r.N)} />
-        <Row label="Rmin sebelum pembulatan" value={exact(r.Rmin)} />
-        <Row
-          label="Status numerik"
-          value={`Konvergen · ${r.convergence.iterations} iterasi`}
-        />
-        <Row
-          label="Toleransi algoritma"
-          value={exact(r.convergence.tolerance)}
-        />
-        {r.method === "fug" ? (
-          <>
-            <Row label="Akar Underwood · θ" value={exact(r.theta)} />
-            <Row label="Gilliland · X" value={exact(r.X)} />
-            <Row label="Gilliland · Y" value={exact(r.Y)} />
-          </>
-        ) : (
-          <>
-            <Row
-              label="Titik pinch · (x; y)"
-              value={`(${exact(r.pinch.x)}; ${exact(r.pinch.y)})`}
-            />
-            {r.RminPinch !== undefined && (
-              <Row
-                label="Rpinch (sebelum batas fisik)"
-                value={exact(r.RminPinch)}
-              />
-            )}
-            {r.Rflow !== undefined && (
-              <Row label="Batas aliran · Rflow" value={exact(r.Rflow)} />
-            )}
-          </>
-        )}
-        {r.balance && (
-          <>
-            <Row
-              label="Residual neraca total · kmol/jam"
-              value={exact(r.balance.totalResidual)}
-            />
-            <Row
-              label="Residual komponen ringan · kmol/jam"
-              value={exact(r.balance.componentResidual)}
-            />
-          </>
-        )}
-      </Disclosure>
-      <Disclosure title="Asumsi & batasan model">
+      <Section title="Asumsi & batasan">
         {ASSUMPTIONS.map((a) => (
           <Text key={a} style={styles.caption}>
             • {a}
@@ -395,7 +371,7 @@ export default function Result() {
           azeotrop atau volatilitas berubah. Angka ini merupakan tahap teoritis;
           verifikasi eksperimen tetap diperlukan.
         </Text>
-      </Disclosure>
+      </Section>
       {tab === "explore" ? (
         <Note>
           Untuk menyimpan atau mengekspor pratinjau, pilih Jadikan skenario
@@ -404,6 +380,19 @@ export default function Result() {
         </Note>
       ) : (
         <>
+          <View style={[styles.actions, { marginBottom: 24 }]}>
+            <Button
+              label="Analisis sensitivitas"
+              icon="analytics-outline"
+              onPress={() => router.push("/sensitivity")}
+            />
+            <Button
+              variant="secondary"
+              label="Ubah parameter"
+              icon="create-outline"
+              onPress={() => router.push("/input")}
+            />
+          </View>
           <Section title="Simpan & ekspor">
             <Field
               numeric={false}
@@ -418,7 +407,7 @@ export default function Result() {
               onPress={() =>
                 void action(
                   () => app.save(name),
-                  "Studi tersimpan. Buka kembali melalui Studi.",
+                  "Studi tersimpan. Buka kembali melalui Riwayat.",
                 )
               }
             />
@@ -445,30 +434,8 @@ export default function Result() {
             {notice && <Note>{notice}</Note>}
             {error && <Note error>{error}</Note>}
           </Section>
-          <View style={[styles.actions, { marginBottom: 24 }]}>
-            <Button
-              variant="secondary"
-              label="Analisis sensitivitas"
-              icon="analytics-outline"
-              onPress={() => router.push("/sensitivity")}
-            />
-            <Button
-              variant="quiet"
-              label="Ubah parameter"
-              icon="create-outline"
-              onPress={() => router.replace("/")}
-            />
-          </View>
         </>
       )}
     </Screen>
   );
 }
-const inputLabels = {
-  zF: "Komposisi umpan · zF",
-  xD: "Komposisi distilat · xD",
-  xB: "Komposisi produk bawah · xB",
-  q: "Kondisi termal umpan · q",
-  alpha: "Volatilitas relatif · α",
-  R: "Rasio refluks · R",
-};

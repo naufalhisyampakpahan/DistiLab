@@ -36,8 +36,7 @@ export function StageTable({
       <Text style={styles.caption}>
         Tahap dari puncak kolom. Baris terakhir mempertahankan langkah
         kesetimbangan penuh; fraksi tahap dihitung dengan interpolasi horizontal
-        menuju xB. Geser tabel ke samping untuk melihat semua kolom. x/y adalah
-        fraksi mol; fraksi tahap bukan efisiensi tray.
+        menuju xB.
       </Text>
       <ScrollView horizontal>
         <ScrollView
@@ -51,7 +50,7 @@ export function StageTable({
                 flexDirection: "row",
                 paddingVertical: 10,
                 borderBottomWidth: 1,
-                borderBottomColor: colors.border,
+                borderBottomColor: "#E5E7EB",
               }}
             >
               {[
@@ -65,10 +64,7 @@ export function StageTable({
               ].map((s, i) => (
                 <Text
                   key={s}
-                  style={[
-                    styles.tableHeader,
-                    { width: i === 1 ? 100 : 88, paddingHorizontal: 8 },
-                  ]}
+                  style={[styles.tableHeader, { width: i === 1 ? 100 : 72 }]}
                 >
                   {s}
                 </Text>
@@ -92,12 +88,12 @@ export function StageTable({
                       : colors.surface,
                   paddingVertical: 10,
                   borderBottomWidth: 1,
-                  borderBottomColor: colors.border,
+                  borderBottomColor: "#E5E7EB",
                 }}
               >
                 {[
                   String(stage.number),
-                  stage.section === "rectifying" ? "Atas" : "Bawah",
+                  stage.section,
                   fmt(stage.start.x),
                   fmt(stage.start.y),
                   fmt(stage.equilibrium.x),
@@ -107,10 +103,7 @@ export function StageTable({
                   <Text
                     selectable
                     key={i}
-                    style={[
-                      styles.tableCell,
-                      { width: i === 1 ? 100 : 88, paddingHorizontal: 8 },
-                    ]}
+                    style={[styles.tableCell, { width: i === 1 ? 100 : 72 }]}
                   >
                     {v}
                   </Text>

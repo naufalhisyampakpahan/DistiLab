@@ -1,0 +1,39 @@
+{
+  "name": "DistiLab — Desain Mobile & Prototype",
+  "screens": [
+    "01 Beranda",
+    "02 Proses",
+    "03 Data kasus",
+    "04 Hasil",
+    "05 Sensitivitas",
+    "06 Verifikasi",
+    "07 Riwayat",
+    "09 Perbandingan",
+    "08 Metodologi"
+  ],
+  "commands": 1262,
+  "prototypeLinks": 64,
+  "frameSize": {
+    "width": 390,
+    "height": 844
+  },
+  "colors": {
+    "navy": "#15374B",
+    "teal": "#087F75",
+    "tealDark": "#05645D",
+    "mint": "#E4F3EE",
+    "bg": "#F5F8F9",
+    "white": "#FFFFFF",
+    "ink": "#183445",
+    "muted": "#6A7E89",
+    "border": "#DFE8ED",
+    "amber": "#D58C31",
+    "amberBg": "#FFF1D9",
+    "blue": "#397CB4",
+    "blueBg": "#EAF2FA",
+    "red": "#B85050"
+  },
+  "font": "Segoe UI",
+  "sample": "C14 · hypothetical binary model",
+  "scope": "Design and connected navigation prototype; not a replacement for the calculation engine."
+}

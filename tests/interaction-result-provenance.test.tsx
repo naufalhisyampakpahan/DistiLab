@@ -24,7 +24,6 @@ const mockApp = {
 
 test("restored result header and CSV keep the original engine version", async () => {
   const screen = await render(<Result />);
-  await fireEvent.press(screen.getByLabelText("Detail numerik & ketelitian"));
   expect(screen.getByText(/mesin 1\.0\.0 · profil umum/)).toBeTruthy();
   if (String(ENGINE_VERSION) !== "1.0.0")
     expect(

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -15,14 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme";
 
-export function Screen({
-  children,
-  scrollRef,
-  footer,
-}: React.PropsWithChildren<{
-  scrollRef?: React.RefObject<ScrollView | null>;
-  footer?: React.ReactNode;
-}>) {
+export function Screen({ children, scrollRef }: React.PropsWithChildren<{ scrollRef?: React.RefObject<ScrollView | null> }>) {
   return (
     <SafeAreaView style={styles.safe} edges={["left", "right", "bottom"]}>
       <KeyboardAvoidingView
@@ -36,19 +29,6 @@ export function Screen({
         >
           <View style={styles.content}>{children}</View>
         </ScrollView>
-        {footer && (
-          <View
-            style={{
-              borderTopWidth: 1,
-              borderTopColor: colors.border,
-              backgroundColor: colors.surface,
-            }}
-          >
-            <View style={[styles.content, { paddingVertical: 10 }]}>
-              {footer}
-            </View>
-          </View>
-        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -182,7 +162,6 @@ export function Field({
   numeric?: boolean;
   editable?: boolean;
 }) {
-  const [focused, setFocused] = useState(false);
   const keyboard: KeyboardTypeOptions = numeric ? "decimal-pad" : "default";
   return (
     <View style={styles.field}>
@@ -198,17 +177,7 @@ export function Field({
         editable={editable}
         value={value}
         onChangeText={onChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={[
-          styles.input,
-          focused && {
-            borderColor: colors.accent,
-            backgroundColor: colors.accentLight,
-          },
-          !editable && { backgroundColor: colors.subtle, color: colors.muted },
-          error && { borderColor: colors.error },
-        ]}
+        style={[styles.input, error && { borderColor: colors.error }]}
         keyboardType={keyboard}
         autoCapitalize="none"
         autoCorrect={false}
@@ -270,103 +239,6 @@ export function Row({ label, value }: { label: string; value: string }) {
     </View>
   );
 }
-export function Disclosure({
-  title,
-  children,
-}: React.PropsWithChildren<{ title: string }>) {
-  const [open, setOpen] = useState(false);
-  return (
-    <View
-      style={{
-        borderTopWidth: 1,
-        borderTopColor: colors.border,
-        paddingVertical: 8,
-        marginBottom: 12,
-        gap: 12,
-      }}
-    >
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={title}
-        accessibilityState={{ expanded: open }}
-        onPress={() => setOpen((previous) => !previous)}
-        style={{
-          minHeight: 48,
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 12,
-        }}
-      >
-        <Text style={[styles.sectionTitle, { flex: 1 }]}>{title}</Text>
-        <Ionicons
-          name={open ? "chevron-up" : "chevron-down"}
-          size={20}
-          color={colors.primary}
-        />
-      </Pressable>
-      {open && children}
-    </View>
-  );
-}
-
-export function ChoiceGroup<T extends string>({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: T;
-  options: readonly { value: T; label: string }[];
-  onChange: (value: T) => void;
-}) {
-  return (
-    <View style={{ gap: 8 }}>
-      <Text style={styles.label}>{label}</Text>
-      <View
-        accessibilityRole="radiogroup"
-        accessibilityLabel={label}
-        style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
-      >
-        {options.map((option) => (
-          <Pressable
-            key={option.value}
-            accessibilityRole="radio"
-            accessibilityLabel={option.label}
-            accessibilityState={{ checked: value === option.value }}
-            onPress={() => onChange(option.value)}
-            style={[
-              styles.button,
-              {
-                flexGrow: 1,
-                backgroundColor:
-                  value === option.value ? colors.accentLight : colors.surface,
-                borderColor:
-                  value === option.value ? colors.accent : colors.border,
-              },
-            ]}
-          >
-            <Ionicons
-              name={
-                value === option.value ? "radio-button-on" : "radio-button-off"
-              }
-              color={value === option.value ? colors.accent : colors.muted}
-              size={18}
-            />
-            <Text
-              style={[
-                styles.buttonText,
-                { color: colors.primary, flexShrink: 1 },
-              ]}
-            >
-              {option.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-    </View>
-  );
-}
 export function Empty({
   title,
   description,
@@ -385,20 +257,20 @@ export function Empty({
 export const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   scroll: { flexGrow: 1, paddingBottom: 24 },
-  content: { width: "100%", maxWidth: 800, alignSelf: "center", padding: 20 },
+  content: { width: "100%", maxWidth: 720, alignSelf: "center", padding: 20 },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "700",
     color: colors.text,
-    lineHeight: 31,
+    lineHeight: 36,
   },
   eyebrow: {
     fontSize: 12,
     fontWeight: "700",
-    letterSpacing: 0.5,
+    letterSpacing: 1.5,
     color: colors.accent,
   },
-  body: { fontSize: 15, lineHeight: 24, color: colors.muted },
+  body: { fontSize: 15, lineHeight: 23, color: colors.muted },
   section: { marginBottom: 28, gap: 12 },
   sectionTitle: {
     fontSize: 18,
@@ -408,7 +280,7 @@ export const styles = StyleSheet.create({
   },
   note: {
     backgroundColor: colors.subtle,
-    borderRadius: 6,
+    borderRadius: 8,
     padding: 14,
     borderLeftWidth: 3,
     borderLeftColor: colors.primary,
@@ -419,27 +291,21 @@ export const styles = StyleSheet.create({
   },
   noteText: { fontSize: 13, lineHeight: 20, color: colors.primary },
   button: {
-    minHeight: 52,
+    minHeight: 48,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 7,
+    borderRadius: 8,
     borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
   },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "600",
-    flexShrink: 1,
-    textAlign: "center",
-  },
+  buttonText: { fontSize: 14, fontWeight: "600" },
   field: { gap: 6, marginBottom: 14 },
   labelRow: {
     flexDirection: "row",
     gap: 8,
-    flexWrap: "wrap",
     alignItems: "baseline",
     justifyContent: "space-between",
   },
@@ -450,25 +316,23 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderWidth: 1,
-    borderRadius: 6,
+    borderRadius: 8,
     paddingHorizontal: 13,
     paddingVertical: 12,
     fontSize: 17,
     color: colors.text,
   },
-  caption: { fontSize: 13, lineHeight: 20, color: colors.muted },
+  caption: { fontSize: 12, lineHeight: 18, color: colors.muted },
   metric: { flex: 1, minWidth: 140, gap: 4, paddingVertical: 14 },
   metricValue: {
     fontSize: 32,
-    fontWeight: "700",
+    fontWeight: "600",
     color: colors.primary,
     fontVariant: ["tabular-nums"],
   },
   row: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "baseline",
-    gap: 8,
+    gap: 16,
     justifyContent: "space-between",
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -480,15 +344,14 @@ export const styles = StyleSheet.create({
     fontWeight: "500",
     color: colors.text,
     fontVariant: ["tabular-nums"],
-    maxWidth: "100%",
-    textAlign: "right",
+    maxWidth: "60%",
   },
   empty: { paddingVertical: 32, gap: 12, alignItems: "center" },
   panel: {
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 16,
   },
   actions: { gap: 10 },

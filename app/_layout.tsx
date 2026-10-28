@@ -16,7 +16,7 @@ export default function RootLayout() {
       >
         <Stack.Screen
           name="(tabs)"
-          options={{ headerShown: false, title: "DistiLab" }}
+          options={{ headerShown: false, title: "Beranda" }}
         />
         <Stack.Screen name="methods" options={{ title: "Pilih metode" }} />
         <Stack.Screen name="process" options={{ title: "Proses distilasi" }} />
