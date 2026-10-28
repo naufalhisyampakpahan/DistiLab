@@ -7,9 +7,12 @@ import os
 import zipfile
 
 root = Path(__file__).resolve().parents[1]
-out = root / "artifacts" / "v1.1"
+app_config = json.loads((root / "app.json").read_text(encoding="utf-8"))["expo"]
+app_version = app_config["version"]
+version_code = app_config["android"]["versionCode"]
+out = root / "artifacts" / f"v{app_version}"
 out.mkdir(parents=True, exist_ok=True)
-target = out / "DistiLab-1.1.0-source.zip"
+target = out / f"DistiLab-{app_version}-source.zip"
 folders = ("app", "src", "assets", "tests", "scripts", "docs", "android")
 root_files = (
     "README.md", "app.json", "eas.json", "package.json", "package-lock.json",
@@ -30,8 +33,8 @@ for folder in folders:
             files.append(file)
 
 manifest = {
-    "appVersion": "1.1.0",
-    "versionCode": 2,
+    "appVersion": app_version,
+    "versionCode": version_code,
     "files": [
         {"path": file.relative_to(root).as_posix(),
          "sha256": hashlib.sha256(file.read_bytes()).hexdigest()}

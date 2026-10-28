@@ -1,15 +1,10 @@
 # DistiLab
 
-## Arsip aplikasi 1.1.0 + desain FigCraft
+## DistiLab 1.10.0 — tampilan aplikasi lokal
 
-Cabang ini menyimpan sumber aplikasi **DistiLab 1.1.0 (versionCode 2)** yang ada di proyek lokal, bersama rancangan FigCraft tanggal 28 Oktober 2026. Versi 1.2.0 tetap tersedia di [branch main](https://github.com/naufalhisyampakpahan/DistiLab/tree/main).
+Rilis ini memakai tampilan aplikasi lokal 1.1.0 sesuai pilihan pemilik: Beranda / Riwayat / Metodologi, dengan alur Proses → Data → Hasil. Versi paket Android dinaikkan menjadi **1.10.0 (versionCode 4)**. Mesin numerik tetap versi 1.1.0 karena persamaan dan algoritmanya tidak berubah.
 
-- [Unduh APK 1.1.0 dan paket desain](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0). APK yang sudah tersedia identik dengan salinan lokal (SHA-256 2349d23b1d128757c74450e3475315aeb6aaa4c91937757eb845dec17a3e9135).
-- [Buka file desain native](design/figcraft/DistiLab-Desain.figcraft), [lihat sistem desain](design/figcraft/Sistem-Desain.png), atau baca [panduan desain](design/figcraft/BACA-DULU.txt).
-- Sembilan layar dan 64 tautan prototipe. Desain FigCraft belum diterapkan ke UI aplikasi atau APK pada cabang ini.
-
-![Pratinjau sembilan layar DistiLab](design/figcraft/Pratinjau-Semua-Layar.png)
-
+[Unduh APK 1.10.0 dan berkas rilis](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.10.0). Desain FigCraft di [design/figcraft](design/figcraft) tersedia sebagai lampiran terpisah dan belum diterapkan ke UI APK ini.
 
 Aplikasi Android React Native + Expo untuk perhitungan dan analisis sensitivitas distilasi biner. Semua persamaan dijalankan secara lokal dalam TypeScript. Tidak memerlukan akun, backend, API berbayar, atau mesin Python.
 
@@ -19,9 +14,9 @@ Alur Proses → Data → Hasil, diagram kolom yang dapat disentuh, penahapan int
 
 ## APK mandiri
 
-**APK versi 1.1.0 sudah dibuat dan tanda tangannya telah diverifikasi.** [Unduh APK](https://expo.dev/artifacts/eas/Zv6vuZ9HMZDEetwI88nZWJwcP3Cd9S6_muEYGV2X_vA.apk) atau gunakan [APK di GitHub Releases](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.1.0). Ukuran 102.884.850 byte (sekitar 103 MB); Android 7.0/API 24 atau lebih baru; ARM64, ARMv7, x86, dan x86_64. Package dan kunci penandatanganan sama dengan versi 1.0; versionCode naik menjadi 2.
+**APK rilis ini memakai versi 1.10.0 dan versionCode 4.** [Unduh melalui GitHub Releases](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.10.0). Package tetap id.distilab.app; Android 7.0/API 24 atau lebih baru. Identitas build, checksum, dan laporan verifikasi tersedia sebagai berkas pada halaman rilis.
 
-Untuk penggunaan di HP, ikuti [panduan pemasangan APK](docs/BUILD_ANDROID.md). APK sudah menyertakan kode, font, dan aset; Expo Go atau server komputer tidak diperlukan. Pengujian pemakaian pada HP fisik masih belum dilakukan. SHA-256 dan pemeriksaan APK dicatat dalam [laporan pengujian](docs/STATUS_PENGUJIAN.md).
+Untuk penggunaan di HP, ikuti [panduan pemasangan APK](docs/BUILD_ANDROID.md). APK sudah menyertakan kode, font, dan aset; Expo Go atau server komputer tidak diperlukan. Pengujian pemakaian pada HP fisik masih belum dilakukan. SHA-256 dan pemeriksaan APK 1.10.0 tersedia pada halaman rilis; [laporan pengujian lama](docs/STATUS_PENGUJIAN.md) menyimpan bukti pengembangan 1.1.0.
 
 ## Menjalankan source
 
@@ -162,7 +157,7 @@ Status perintah, jumlah tes aktual, pemeriksaan UI, dan keterbatasan lingkungan 
 
 Penjelasan pemilihan persamaan, ketelitian, dan rancangan pengembangan multikomponen terdapat dalam dokumentasi metodologi.
 
-## Isi cabang dan build lokal
+## Isi cabang rilis dan build lokal
 
 Sumber, tes, lockfile, dokumentasi, aset, proyek Android, dan desain tersedia di Git. Cache, node_modules, hasil build, log, kredensial, serta kunci penandatanganan tidak disertakan. Tautan artefak lokal dalam dokumentasi lama adalah catatan bukti pengembangan; unduhan yang tersedia di GitHub berada di halaman rilis.
 

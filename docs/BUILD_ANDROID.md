@@ -1,10 +1,12 @@
 # APK Android DistiLab
 
+Rilis aktif pada cabang ini: **DistiLab 1.10.0 (versionCode 4)**, dengan tampilan lokal 1.1.0. [Unduh APK dan laporan rilis](https://github.com/naufalhisyampakpahan/DistiLab/releases/tag/apk-v1.10.0). Catatan berikut mencakup arsip build 1.1.0 dan langkah build yang tetap berlaku.
+
 APK final **DistiLab-1.1.0.apk** telah dibuat pada 21 Oktober 2026 dan tanda tangannya terverifikasi. [Unduh APK](https://expo.dev/artifacts/eas/Zv6vuZ9HMZDEetwI88nZWJwcP3Cd9S6_muEYGV2X_vA.apk) atau gunakan [salinan lokal](../artifacts/v1.1/DistiLab-1.1.0.apk). Package id.distilab.app dan kunci penandatanganan dipertahankan; versionCode 2 untuk pembaruan dari 1.0. Identitas build, checksum, dan hasil pemeriksaan ada di [panduan 1.1](RELEASE_1_1.md). Uji pada HP fisik belum dilakukan.
 
 ## Memasang di HP
 
-1. Gunakan HP Android 7.0 atau lebih baru. Salin atau unduh **DistiLab-1.1.0.apk** melalui tautan di atas ke HP. Arsip ZIP sumber tersedia untuk pengembangan; berkas APK diunduh melalui tautan APK.
+1. Gunakan HP Android 7.0 atau lebih baru. Salin atau unduh **DistiLab-1.10.0.apk** dari halaman rilis aktif di atas ke HP. Arsip ZIP sumber tersedia untuk pengembangan; berkas APK diunduh melalui tautan APK.
 2. Buka aplikasi **Files / Berkas / Pengelola File** di HP, cari folder tempat APK tersimpan, lalu ketuk berkas APK tersebut.
 3. Jika muncul permintaan izin pemasangan, buka **Setelan** dari dialog itu dan izinkan **Pasang aplikasi tidak dikenal / Izinkan dari sumber ini** hanya untuk aplikasi pengelola file yang sedang digunakan. Kembali ke APK dan lanjutkan pemasangan. Nama menu dapat berbeda menurut merek dan versi Android; lihat [petunjuk Google](https://support.google.com/pixelphone/answer/7391672?hl=en).
 4. Tekan **Pasang**, lalu **Buka**, atau buka ikon **DistiLab** dari daftar aplikasi.
