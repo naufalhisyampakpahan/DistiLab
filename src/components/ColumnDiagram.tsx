@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Svg, { Line, Path } from "react-native-svg";
-import { colors } from "../theme";
+import { useTheme, type ThemeColors } from "../theme";
 import type { BinaryInput, CalculationResult } from "../types";
 import { fmt } from "../utils/format";
 
@@ -27,6 +27,9 @@ export function ColumnDiagram({
   selectedPart?: ColumnPart;
   onSelect?: (part: ColumnPart) => void;
 }) {
+  const { colors } = useTheme();
+  const s = make_s(colors);
+
   const number = (n: number | undefined, precision = 3) =>
     n === undefined || !Number.isFinite(n) ? "—" : fmt(n, precision);
   const balance =
@@ -165,44 +168,45 @@ export function ColumnDiagram({
     </View>
   );
 }
-const s = StyleSheet.create({
-  diagram: { height: 410, width: "100%", position: "relative" },
-  node: {
-    position: "absolute",
-    minHeight: 68,
-    paddingHorizontal: 7,
-    paddingVertical: 10,
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: 12,
-    justifyContent: "center",
-    gap: 5,
-  },
-  column: {
-    position: "absolute",
-    left: "37%",
-    width: "26%",
-    top: 89,
-    height: 216,
-    borderColor: colors.primary,
-    borderWidth: 2,
-    borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 6,
-    backgroundColor: "rgba(237,243,246,0.78)",
-  },
-  label: {
-    fontSize: 12,
-    color: colors.primary,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-  detail: {
-    fontSize: 12,
-    color: colors.text,
-    textAlign: "center",
-    lineHeight: 19,
-  },
-});
+const make_s = (colors: ThemeColors) =>
+  StyleSheet.create({
+    diagram: { height: 410, width: "100%", position: "relative" },
+    node: {
+      position: "absolute",
+      minHeight: 68,
+      paddingHorizontal: 7,
+      paddingVertical: 10,
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 12,
+      justifyContent: "center",
+      gap: 5,
+    },
+    column: {
+      position: "absolute",
+      left: "37%",
+      width: "26%",
+      top: 89,
+      height: 216,
+      borderColor: colors.primary,
+      borderWidth: 2,
+      borderRadius: 22,
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 6,
+      backgroundColor: colors.accentLight,
+    },
+    label: {
+      fontSize: 12,
+      color: colors.primary,
+      fontWeight: "700",
+      textAlign: "center",
+    },
+    detail: {
+      fontSize: 12,
+      color: colors.text,
+      textAlign: "center",
+      lineHeight: 19,
+    },
+  });

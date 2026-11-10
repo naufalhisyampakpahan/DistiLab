@@ -1,7 +1,9 @@
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colors } from "../../src/theme";
+import { useTheme, type ThemeColors } from "../../src/theme";
 export default function TabLayout() {
+  const { colors } = useTheme();
+
   return (
     <Tabs
       screenOptions={{
@@ -21,9 +23,10 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "DistiLab",
+          headerShown: false,
           tabBarLabel: "Beranda",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="flask-outline" color={color} size={size} />
+            <Ionicons name="home-outline" color={color} size={size} />
           ),
         }}
       />

@@ -13,10 +13,10 @@ import {
   Row,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../src/components/ui";
 import { useApp } from "../src/state/AppContext";
-import { colors } from "../src/theme";
+import { useTheme, type ThemeColors } from "../src/theme";
 import type { SensitivityParameter, SensitivityRun } from "../src/types";
 import { sensitivityCSV } from "../src/utils/csv";
 import { shareCSV } from "../src/utils/export";
@@ -32,6 +32,9 @@ const params: Array<{ key: SensitivityParameter; label: string }> = [
 const suggestedValue = (value: number): string =>
   String(Number(value.toPrecision(8)));
 export default function Sensitivity() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp(),
     result = app.result;
   const [parameter, setParameter] = useState<SensitivityParameter>("R"),

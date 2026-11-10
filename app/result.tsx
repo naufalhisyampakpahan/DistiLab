@@ -16,17 +16,21 @@ import {
   Row,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../src/components/ui";
 import { FUGGraph } from "../src/features/fug/FUGGraph";
+import { ResultPreview } from "../src/components/ResultPreview";
 import { StageTable } from "../src/features/mccabe-thiele/StageTable";
 import { useApp } from "../src/state/AppContext";
-import { colors } from "../src/theme";
+import { useTheme, type ThemeColors } from "../src/theme";
 import { ASSUMPTIONS, ENGINE_VERSION } from "../src/types";
 import { calculationCSV } from "../src/utils/csv";
 import { shareCSV } from "../src/utils/export";
 import { dateTime, exact, fmt, methodName } from "../src/utils/format";
 export default function Result() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp(),
     r = app.result;
   const [tab, setTab] = useState<"summary" | "chart" | "steps" | "explore">(
@@ -140,24 +144,74 @@ export default function Result() {
       </View>
       {tab === "summary" && (
         <>
-          <View style={[styles.panel, { marginBottom: 24 }]}>
-            <View style={styles.horizontal}>
-              <Metric
-                label="Tahap teoritis · N"
-                value={fmt(r.N, 4)}
-                unit="tahap"
-              />
-              <Metric
-                label="Tahap yang diperlukan"
-                value={String(r.Nceil)}
-                unit="tahap"
-              />
+          <View
+            style={{
+              backgroundColor: colors.hero,
+              padding: 20,
+              borderRadius: 20,
+              marginBottom: 18,
+              gap: 14,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: 20,
+              }}
+            >
+              <View style={{ flex: 1, minWidth: 140, gap: 5 }}>
+                <Text style={{ fontSize: 12, color: colors.heroMuted }}>
+                  Tahap yang diperlukan
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 44,
+                    fontWeight: "700",
+                    color: colors.heroText,
+                  }}
+                >
+                  {r.Nceil}
+                </Text>
+                <Text style={{ fontSize: 12, color: colors.heroMuted }}>
+                  tahap teoritis
+                </Text>
+              </View>
+              <View style={{ gap: 6 }}>
+                <Text style={{ fontSize: 12, color: colors.heroMuted }}>
+                  Tahap teoritis · N
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 23,
+                    fontWeight: "600",
+                    color: colors.heroText,
+                  }}
+                >
+                  {fmt(r.N, 4)}
+                </Text>
+                <Text style={{ fontSize: 12, color: colors.heroMuted }}>
+                  Rmin {fmt(r.Rmin, 3)}
+                </Text>
+              </View>
             </View>
-            <Text style={styles.caption}>
+            <Text style={[styles.caption, { color: colors.heroMuted }]}>
               Termasuk 1 reboiler kesetimbangan; total condenser tidak dihitung.
               Kebutuhan tray teoritis bulat: {Math.max(0, r.Nceil - 1)}.
             </Text>
           </View>
+          {r.method === "mccabe" && (
+            <View style={[styles.panel, { marginBottom: 24, gap: 12 }]}>
+              <ResultPreview result={r} />
+              <Button
+                label="Jelajahi grafik"
+                variant="quiet"
+                icon="analytics-outline"
+                onPress={() => setTab("chart")}
+              />
+            </View>
+          )}
           <Section title="Batas & kondisi operasi">
             <Row label="Refluks minimum · Rmin" value={fmt(r.Rmin, 6)} />
             <Row label="Refluks operasi · R" value={fmt(r.input.R)} />

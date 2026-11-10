@@ -11,20 +11,21 @@ import Svg, {
   Rect,
   Text as SvgText,
 } from "react-native-svg";
-import { colors } from "../theme";
+import { useTheme, type ThemeColors } from "../theme";
 import type { McCabeResult, Point } from "../types";
 
 type CurveKey =
   "diagonal" | "equilibrium" | "rectifying" | "stripping" | "q" | "stages";
-const CURVES: { key: CurveKey; label: string; color: string; dash?: string }[] =
-  [
-    { key: "diagonal", label: "Diagonal", color: "#8B949E", dash: "5 4" },
-    { key: "equilibrium", label: "Kesetimbangan", color: colors.primary },
-    { key: "rectifying", label: "Rectifying", color: colors.accent },
-    { key: "stripping", label: "Stripping", color: "#A66A19" },
-    { key: "q", label: "Garis q", color: "#6871A3", dash: "6 3" },
-    { key: "stages", label: "Tahap", color: colors.error },
-  ];
+const makeCurves = (
+  colors: ThemeColors,
+): { key: CurveKey; label: string; color: string; dash?: string }[] => [
+  { key: "diagonal", label: "Diagonal", color: "#8B949E", dash: "5 4" },
+  { key: "equilibrium", label: "Kesetimbangan", color: colors.primary },
+  { key: "rectifying", label: "Rectifying", color: colors.blue },
+  { key: "stripping", label: "Stripping", color: colors.blue, dash: "4 3" },
+  { key: "q", label: "Garis q", color: colors.blue, dash: "6 3" },
+  { key: "stages", label: "Tahap", color: colors.amber },
+];
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
 
@@ -142,6 +143,10 @@ export function McCabeChart({
   onStageSelect,
   playbackStep = null,
 }: McCabeChartProps) {
+  const { colors } = useTheme();
+  const styles = make_styles(colors);
+  const CURVES = makeCurves(colors);
+
   const [width, setWidth] = useState(320);
   const [zoom, setZoom] = useState<number>(1);
   const [center, setCenter] = useState<Point>({ x: 0.5, y: 0.5 });
@@ -653,51 +658,52 @@ export function McCabeChart({
   );
 }
 
-const styles = StyleSheet.create({
-  container: { width: "100%", gap: 8 },
-  titleRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 6,
-  },
-  title: { fontSize: 16, fontWeight: "600", color: colors.text },
-  caption: { fontSize: 12, color: colors.muted, lineHeight: 18 },
-  controls: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: 6,
-  },
-  control: {
-    minWidth: 42,
-    minHeight: 48,
-    paddingHorizontal: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 6,
-    backgroundColor: colors.surface,
-  },
-  controlText: { fontSize: 13, fontWeight: "600", color: colors.primary },
-  selected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  selectedText: { color: colors.surface },
-  pressed: { opacity: 0.7 },
-  readout: { fontSize: 12, color: colors.primary, minHeight: 18 },
-  legend: { flexDirection: "row", flexWrap: "wrap", gap: 4 },
-  legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    minHeight: 44,
-    paddingHorizontal: 7,
-    gap: 6,
-    borderRadius: 6,
-  },
-  swatch: { width: 16, height: 3, borderRadius: 2 },
-  legendText: { fontSize: 12, color: colors.text },
-  hidden: { opacity: 0.35 },
-});
+const make_styles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: { width: "100%", gap: 8 },
+    titleRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 6,
+    },
+    title: { fontSize: 16, fontWeight: "600", color: colors.text },
+    caption: { fontSize: 12, color: colors.muted, lineHeight: 18 },
+    controls: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+      gap: 6,
+    },
+    control: {
+      minWidth: 42,
+      minHeight: 48,
+      paddingHorizontal: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 6,
+      backgroundColor: colors.surface,
+    },
+    controlText: { fontSize: 13, fontWeight: "600", color: colors.primary },
+    selected: { backgroundColor: colors.primary, borderColor: colors.primary },
+    selectedText: { color: colors.surface },
+    pressed: { opacity: 0.7 },
+    readout: { fontSize: 12, color: colors.primary, minHeight: 18 },
+    legend: { flexDirection: "row", flexWrap: "wrap", gap: 4 },
+    legendItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      minHeight: 44,
+      paddingHorizontal: 7,
+      gap: 6,
+      borderRadius: 6,
+    },
+    swatch: { width: 16, height: 3, borderRadius: 2 },
+    legendText: { fontSize: 12, color: colors.text },
+    hidden: { opacity: 0.35 },
+  });
 
 export default McCabeChart;

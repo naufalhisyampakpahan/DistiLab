@@ -1,3 +1,6 @@
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
+);
 // The application is offline. Replacing Expo's lazy native fetch accessor also
 // prevents framework teardown from initializing a native network module late.
 Object.defineProperty(globalThis, "fetch", {

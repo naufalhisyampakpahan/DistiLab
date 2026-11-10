@@ -8,7 +8,7 @@ import {
   Note,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../src/components/ui";
 import { ComparisonChart } from "../src/components/ComparisonChart";
 import { useApp } from "../src/state/AppContext";
@@ -16,12 +16,15 @@ import type { Study } from "../src/types";
 import { projectKey, scenarioDifferences } from "../src/storage/scenarios";
 import type { ScenarioDifference } from "../src/storage/scenarios";
 import { dateTime, fmt, methodName } from "../src/utils/format";
-import { colors } from "../src/theme";
+import { useTheme, type ThemeColors } from "../src/theme";
 
 const scalar = (value: string | string[] | undefined) =>
   Array.isArray(value) ? value[0] : value;
 
 export default function Compare() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp();
   const params = useLocalSearchParams<{ left?: string; right?: string }>();
   const [selected, setSelected] = useState<string[]>([]);
@@ -181,6 +184,9 @@ function ComparisonRow({
   row: ScenarioDifference;
   changed?: boolean;
 }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const format = (value: number | undefined) =>
     value === undefined ? "—" : fmt(value, 8);
   return (

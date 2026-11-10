@@ -1,3 +1,4 @@
+import { useTheme, type ThemeColors } from "../src/theme";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
 import {
@@ -6,10 +7,13 @@ import {
   Note,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../src/components/ui";
 import { useApp } from "../src/state/AppContext";
 export default function Methods() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp();
   return (
     <Screen>
@@ -36,7 +40,7 @@ export default function Methods() {
         />
       </Section>
       <View
-        style={{ height: 1, backgroundColor: "#E5E7EB", marginBottom: 24 }}
+        style={{ height: 1, backgroundColor: colors.border, marginBottom: 24 }}
       />
       <Section title="Fenske–Underwood–Gilliland">
         <Text style={styles.body}>

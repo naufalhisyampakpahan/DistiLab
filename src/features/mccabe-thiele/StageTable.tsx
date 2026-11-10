@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Button, styles } from "../../components/ui";
-import { colors } from "../../theme";
+import { Button, useStyles } from "../../components/ui";
+import { useTheme, type ThemeColors } from "../../theme";
 import type { McCabeResult } from "../../types";
 import { fmt } from "../../utils/format";
 export function StageTable({
@@ -13,6 +13,9 @@ export function StageTable({
   selectedStage?: number | null;
   onStageSelect?: (stage: number) => void;
 }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const [limit, setLimit] = useState(30);
   const vertical = useRef<ScrollView>(null);
   useEffect(() => {
@@ -50,7 +53,7 @@ export function StageTable({
                 flexDirection: "row",
                 paddingVertical: 10,
                 borderBottomWidth: 1,
-                borderBottomColor: "#E5E7EB",
+                borderBottomColor: colors.border,
               }}
             >
               {[
@@ -88,7 +91,7 @@ export function StageTable({
                       : colors.surface,
                   paddingVertical: 10,
                   borderBottomWidth: 1,
-                  borderBottomColor: "#E5E7EB",
+                  borderBottomColor: colors.border,
                 }}
               >
                 {[

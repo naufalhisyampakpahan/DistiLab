@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import Svg, { Line, Path, Text as SvgText } from "react-native-svg";
 import type { Point, Study } from "../types";
-import { colors } from "../theme";
-import { styles } from "./ui";
+import { useTheme, type ThemeColors } from "../theme";
+import { useStyles } from "./ui";
 
 export function ComparisonChart({ a, b }: { a: Study; b: Study }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const [width, setWidth] = useState(340);
   if (a.result.method !== "mccabe" || b.result.method !== "mccabe") return null;
   const margin = { left: 48, top: 22, right: 18, bottom: 48 };
@@ -110,6 +113,9 @@ function ViewGrid({
   x: (v: number) => number;
   y: (v: number) => number;
 }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   return (
     <>
       <Line

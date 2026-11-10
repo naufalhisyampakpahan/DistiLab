@@ -1,10 +1,14 @@
+import { useTheme, type ThemeColors } from "../../theme";
 import { useMemo } from "react";
 import { Text, View } from "react-native";
 import { runSensitivity } from "../../calculations";
 import { SeriesChart } from "../../components/SeriesChart";
-import { styles } from "../../components/ui";
+import { useStyles } from "../../components/ui";
 import type { FUGResult } from "../../types";
 export function FUGGraph({ result }: { result: FUGResult }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const run = useMemo(
     () =>
       runSensitivity(
@@ -12,7 +16,10 @@ export function FUGGraph({ result }: { result: FUGResult }) {
         result.input,
         "R",
         result.Rmin + (result.input.R - result.Rmin) * 0.1,
-        Math.min(Number.MAX_VALUE, Math.max(result.input.R * 2, result.Rmin + 2)),
+        Math.min(
+          Number.MAX_VALUE,
+          Math.max(result.input.R * 2, result.Rmin + 2),
+        ),
         31,
       ),
     [result],

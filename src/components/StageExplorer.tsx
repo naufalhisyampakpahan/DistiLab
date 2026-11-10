@@ -1,9 +1,10 @@
+import { useTheme, type ThemeColors } from "../theme";
 import { useEffect, useState } from "react";
 import { AccessibilityInfo, Switch, Text, View } from "react-native";
 import { router } from "expo-router";
 import { ColumnDiagram } from "./ColumnDiagram";
 import { McCabeChart } from "./McCabeChart";
-import { Button, Note, Row, styles } from "./ui";
+import { Button, Note, Row, useStyles } from "./ui";
 import { StageTable } from "../features/mccabe-thiele/StageTable";
 import type { McCabeResult } from "../types";
 import { fmt } from "../utils/format";
@@ -19,6 +20,9 @@ export function StageExplorer({
   selectedStage,
   onStageSelect,
 }: StageExplorerProps) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const [step, setStep] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);

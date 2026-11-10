@@ -1,150 +1,251 @@
 import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  Button,
-  Empty,
-  Heading,
-  Note,
-  Screen,
-  Section,
-  styles,
-} from "../../src/components/ui";
+import { Button, Note, Screen, useStyles } from "../../src/components/ui";
 import { useApp } from "../../src/state/AppContext";
-import { colors } from "../../src/theme";
-import { dateTime, fmt, methodName } from "../../src/utils/format";
+import { useTheme } from "../../src/theme";
+import { fmt } from "../../src/utils/format";
+
 export default function Home() {
   const app = useApp();
+  const { colors, mode, ready, error, toggleTheme } = useTheme();
+  const styles = useStyles();
   const last = app.studies[0];
+  const active = Object.entries(app.fields).some(
+    ([key, value]) => key !== "q" && value.trim() !== "",
+  );
   return (
-    <Screen>
-      <Heading
-        eyebrow="DISTILAB 1.1 · LABORATORIUM DISTILASI"
-        title="Dari proses ke pemahaman."
-        description="Jelajahi kolom, telusuri setiap tahap, dan verifikasi hasil untuk penelitianmu."
-      />
-      <Button
-        label="Kasus penelitian baru"
-        icon="add-outline"
-        disabled={!app.ready}
-        onPress={() => {
-          app.newCase("research");
-          router.push("/process");
+    <Screen topInset>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          marginBottom: 36,
         }}
-      />
-      <View style={{ height: 12 }} />
-      <Button
-        label="Lanjutkan kasus aktif"
-        icon="git-branch-outline"
-        variant="secondary"
-        disabled={!app.ready}
-        onPress={() => router.push("/process")}
-      />
-      <View style={{ height: 28 }} />
-      <Section title="Verifikasi untuk penelitian">
+      >
         <View
-          style={[styles.panel, { backgroundColor: colors.subtle, gap: 12 }]}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 11,
+            flex: 1,
+          }}
         >
-          <Text style={styles.sectionTitle}>27 kasus. Satu paket hasil.</Text>
-          <Text style={styles.body}>
-            Jalankan C01–C27, periksa 162 keluaran terhadap referensi
-            independen, dan ekspor XLSX untuk Excel.
-          </Text>
-          <Button
-            label="Jalankan paket verifikasi"
-            icon="checkmark-done-outline"
-            onPress={() => router.push("/verification")}
-          />
-          <Text style={styles.caption}>
-            α konstan · q=1 · 9 kondisi batas · data dan versi run tercatat
-          </Text>
-        </View>
-      </Section>
-      <Section title="Metode perhitungan">
-        {(["mccabe", "fug"] as const).map((m) => (
-          <Pressable
-            key={m}
-            accessibilityRole="button"
-            disabled={!app.ready}
-            accessibilityLabel={methodName(m)}
-            onPress={() => {
-              app.setMethod(m);
-              router.push("/process");
+          <View
+            style={{
+              backgroundColor: colors.button,
+              borderRadius: 13,
+              padding: 10,
             }}
-            style={({ pressed }) => [
-              styles.panel,
-              { gap: 8, opacity: pressed ? 0.65 : 1 },
-            ]}
           >
-            <View
+            <Ionicons name="flask-outline" color={colors.onButton} size={24} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{ fontSize: 24, fontWeight: "700", color: colors.text }}
+            >
+              DistiLab
+            </Text>
+            <Text style={{ fontSize: 9, lineHeight: 15, color: colors.muted }}>
+              LABORATORIUM DISTILASI
+            </Text>
+          </View>
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={
+            mode === "light" ? "Aktifkan mode gelap" : "Aktifkan mode terang"
+          }
+          accessibilityState={{ disabled: !ready }}
+          disabled={!ready}
+          onPress={toggleTheme}
+          style={({ pressed }) => ({
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 7,
+            minHeight: 44,
+            paddingHorizontal: 12,
+            borderRadius: 13,
+            backgroundColor: colors.surface,
+            borderWidth: 1,
+            borderColor: colors.border,
+            opacity: pressed ? 0.7 : 1,
+          })}
+        >
+          <Ionicons
+            name={mode === "light" ? "moon-outline" : "sunny-outline"}
+            size={22}
+            color={colors.accent}
+          />
+          <Text style={{ color: colors.text, fontWeight: "600", fontSize: 13 }}>
+            {mode === "light" ? "Gelap" : "Terang"}
+          </Text>
+        </Pressable>
+      </View>
+      {error ? <Note error>{error}</Note> : null}
+      <Text
+        accessibilityRole="header"
+        style={{
+          color: colors.text,
+          fontSize: 29,
+          lineHeight: 40,
+          fontWeight: "700",
+          marginBottom: 14,
+        }}
+      >
+        Simulasi distilasi,{"\n"}lebih mudah.
+      </Text>
+      <Text style={[styles.body, { marginBottom: 30 }]}>
+        Pahami proses, atur parameter, lalu bandingkan hasil pemisahannya.
+      </Text>
+      <View
+        style={{
+          backgroundColor: colors.hero,
+          padding: 20,
+          borderRadius: 22,
+          gap: 18,
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <View style={{ flex: 1, gap: 10 }}>
+            <Text
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 12,
+                fontSize: 20,
+                lineHeight: 28,
+                fontWeight: "600",
+                color: colors.heroText,
               }}
             >
-              <Text style={[styles.sectionTitle, { flex: 1 }]}>
-                {methodName(m)}
-              </Text>
-              <Ionicons
-                name="arrow-forward-outline"
-                size={22}
-                color={colors.primary}
-              />
-            </View>
-            <Text style={styles.body}>
-              {m === "mccabe"
-                ? "Tahap demi tahap dari diagram kesetimbangan x–y."
-                : "Estimasi tahap minimum, refluks minimum, dan tahap operasi."}
-            </Text>
-            <Text style={styles.caption}>
-              {m === "mccabe"
-                ? "Metode grafis · volatilitas relatif konstan"
-                : "Metode shortcut · Fenske + Underwood + Gilliland"}
-            </Text>
-          </Pressable>
-        ))}
-      </Section>
-      <Section title="Studi terakhir">
-        {app.storageError ? (
-          <Note error>{app.storageError}</Note>
-        ) : last ? (
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => {
-              app.restore(last);
-              router.push("/result");
-            }}
-            style={[styles.panel, { gap: 8 }]}
-          >
-            <Text style={styles.sectionTitle}>{last.name}</Text>
-            <Text style={styles.caption}>
-              {methodName(last.result.method)} · {dateTime(last.createdAt)}
+              Mulai eksplorasimu
             </Text>
             <Text
-              style={{ color: colors.primary, fontSize: 24, fontWeight: "600" }}
+              style={{ fontSize: 14, lineHeight: 22, color: colors.heroMuted }}
             >
-              {fmt(last.result.N, 2)} tahap teoritis
+              Dari campuran hingga kebutuhan tahap kolom.
             </Text>
-            <Text style={styles.caption}>Buka hasil tersimpan</Text>
-          </Pressable>
-        ) : (
-          <Empty
-            title="Belum ada studi tersimpan"
-            description="Setelah menghitung, simpan hasil dengan nama studi untuk dibuka kembali."
-          />
-        )}
+          </View>
+          <View
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            style={{
+              width: 44,
+              height: 80,
+              borderRadius: 22,
+              borderWidth: 1,
+              borderColor: "#80BDB1",
+              backgroundColor: "#2C5B67",
+              paddingHorizontal: 7,
+              justifyContent: "space-evenly",
+            }}
+          >
+            {[0, 1, 2, 3].map((n) => (
+              <View key={n} style={{ height: 2, backgroundColor: "#9FD8C7" }} />
+            ))}
+          </View>
+        </View>
         <Button
-          variant="quiet"
-          label="Lihat riwayat"
-          icon="time-outline"
-          onPress={() => router.push("/history")}
+          label="Mulai simulasi"
+          icon="arrow-forward-outline"
+          disabled={!app.ready}
+          onPress={() => {
+            app.newCase("research");
+            router.push("/process");
+          }}
         />
-      </Section>
-      <Note>
-        Seluruh perhitungan berjalan di perangkat. Profil penelitian memakai
-        q=1; mode umum dan riwayat lama tetap mendukung 0 ≤ q ≤ 1.
-      </Note>
+      </View>
+      <Text
+        style={[
+          styles.caption,
+          { textAlign: "center", marginTop: 14, marginBottom: 28 },
+        ]}
+      >
+        McCabe–Thiele · Fenske–Underwood–Gilliland
+      </Text>
+      <Text
+        accessibilityRole="header"
+        style={[styles.sectionTitle, { fontSize: 16, marginBottom: 16 }]}
+      >
+        Tiga langkah sederhana
+      </Text>
+      <View style={{ flexDirection: "row", gap: 10, marginBottom: 22 }}>
+        {[
+          ["01", "Proses", "Kenali kolom"],
+          ["02", "Data", "Atur kondisi"],
+          ["03", "Hasil", "Baca analisis"],
+        ].map(([n, title, detail]) => (
+          <View
+            key={n}
+            style={{
+              flex: 1,
+              padding: 12,
+              gap: 5,
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+              borderWidth: 1,
+              borderRadius: 18,
+            }}
+          >
+            <Text
+              style={{ fontSize: 11, fontWeight: "700", color: colors.accent }}
+            >
+              {n}
+            </Text>
+            <Text
+              style={{ fontSize: 15, fontWeight: "600", color: colors.text }}
+            >
+              {title}
+            </Text>
+            <Text style={{ fontSize: 11, lineHeight: 17, color: colors.muted }}>
+              {detail}
+            </Text>
+          </View>
+        ))}
+      </View>
+      {active && (
+        <Button
+          label="Lanjutkan kasus aktif"
+          variant="quiet"
+          icon="git-branch-outline"
+          disabled={!app.ready}
+          onPress={() => router.push("/process")}
+        />
+      )}
+      {app.storageError ? (
+        <Note error>{app.storageError}</Note>
+      ) : last ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Buka studi ${last.name}`}
+          onPress={() => {
+            app.restore(last);
+            router.push("/result");
+          }}
+          style={[styles.panel, { marginTop: 16, gap: 5 }]}
+        >
+          <Text style={styles.caption}>STUDI TERAKHIR</Text>
+          <Text style={styles.sectionTitle}>{last.name}</Text>
+          <Text
+            style={{ color: colors.primary, fontSize: 20, fontWeight: "600" }}
+          >
+            {fmt(last.result.N, 2)} tahap teoritis
+          </Text>
+        </Pressable>
+      ) : null}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+          marginTop: 18,
+          marginBottom: 8,
+        }}
+      >
+        <Ionicons name="wifi-outline" color={colors.accent} size={22} />
+        <Text style={styles.caption}>Siap dipakai tanpa internet</Text>
+      </View>
     </Screen>
   );
 }

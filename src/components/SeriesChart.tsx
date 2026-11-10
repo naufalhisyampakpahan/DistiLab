@@ -10,7 +10,7 @@ import Svg, {
   Rect,
   Text as SvgText,
 } from "react-native-svg";
-import { colors } from "../theme";
+import { useTheme, type ThemeColors } from "../theme";
 import { chartPressCoordinates } from "./McCabeChart";
 
 export interface SeriesPoint {
@@ -77,6 +77,9 @@ export function SeriesChart({
   selectedIndex,
   onPointSelect,
 }: SeriesChartProps) {
+  const { colors } = useTheme();
+  const styles = make_styles(colors);
+
   const [width, setWidth] = useState(320);
   const [localSelection, setLocalSelection] = useState<number | null>(null);
   const segments = useMemo(() => splitSeries(points), [points]);
@@ -284,17 +287,18 @@ export function SeriesChart({
   );
 }
 
-const styles = StyleSheet.create({
-  container: { width: "100%", gap: 8 },
-  title: { fontSize: 16, fontWeight: "600", color: colors.text },
-  caption: { fontSize: 12, lineHeight: 18, color: colors.muted },
-  empty: {
-    paddingVertical: 18,
-    gap: 8,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.border,
-  },
-});
+const make_styles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: { width: "100%", gap: 8 },
+    title: { fontSize: 16, fontWeight: "600", color: colors.text },
+    caption: { fontSize: 12, lineHeight: 18, color: colors.muted },
+    empty: {
+      paddingVertical: 18,
+      gap: 8,
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: colors.border,
+    },
+  });
 
 export default SeriesChart;

@@ -8,17 +8,20 @@ import {
   Note,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../components/ui";
 import { WorkflowNav } from "../components/WorkflowNav";
 import { useApp } from "../state/AppContext";
 import { inspectFields, parseFields } from "../utils/draft";
 import type { Fields } from "../utils/draft";
 import { minimumReflux } from "../calculations";
-import { colors } from "../theme";
+import { useTheme, type ThemeColors } from "../theme";
 import { fmt, methodName } from "../utils/format";
 
 export default function CaseInputScreen() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp();
   const params = useLocalSearchParams<{ section?: string }>();
   const [error, setError] = useState(""),
@@ -183,28 +186,34 @@ export default function CaseInputScreen() {
         <Section
           title={`01 · Campuran dan target — ${status(["zF", "xD", "xB"])}`}
         >
-          <Field
-            label="Umpan"
-            symbol="zF · mol/mol"
-            value={app.fields.zF}
-            onChange={(v) => change("zF", v)}
-            error={fieldError("zF")}
-            help="0 < xB < zF < xD < 1"
-          />
-          <Field
-            label="Distilat"
-            symbol="xD · mol/mol"
-            value={app.fields.xD}
-            onChange={(v) => change("xD", v)}
-            error={fieldError("xD")}
-          />
-          <Field
-            label="Produk bawah"
-            symbol="xB · mol/mol"
-            value={app.fields.xB}
-            onChange={(v) => change("xB", v)}
-            error={fieldError("xB")}
-          />
+          <Text style={styles.caption}>Fraksi mol · mol/mol</Text>
+          <View style={styles.horizontal}>
+            <Field
+              compact
+              label="Umpan"
+              symbol="zF · mol/mol"
+              value={app.fields.zF}
+              onChange={(v) => change("zF", v)}
+              error={fieldError("zF")}
+            />
+            <Field
+              compact
+              label="Distilat"
+              symbol="xD · mol/mol"
+              value={app.fields.xD}
+              onChange={(v) => change("xD", v)}
+              error={fieldError("xD")}
+            />
+            <Field
+              compact
+              label="Produk bawah"
+              symbol="xB · mol/mol"
+              value={app.fields.xB}
+              onChange={(v) => change("xB", v)}
+              error={fieldError("xB")}
+            />
+          </View>
+          <Text style={styles.caption}>0 &lt; xB &lt; zF &lt; xD &lt; 1</Text>
         </Section>
       </View>
       <View

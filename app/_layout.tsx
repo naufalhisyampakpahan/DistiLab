@@ -1,11 +1,32 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { AppProvider } from "../src/state/AppContext";
-import { colors } from "../src/theme";
+import { ThemeProvider, useTheme } from "../src/theme";
+import { Appearance, Platform } from "react-native";
+import { useEffect } from "react";
+import * as SystemUI from "expo-system-ui";
 export default function RootLayout() {
   return (
-    <AppProvider>
-      <StatusBar style="dark" />
+    <ThemeProvider>
+      <AppProvider>
+        <Navigation />
+      </AppProvider>
+    </ThemeProvider>
+  );
+}
+function Navigation() {
+  const { colors } = useTheme();
+  const { mode } = useTheme();
+  useEffect(() => {
+    if (Platform.OS !== "web") {
+      Appearance.setColorScheme(mode);
+      void SystemUI.setBackgroundColorAsync(colors.background).catch(() => {});
+    }
+  }, [mode, colors]);
+
+  return (
+    <>
+      <StatusBar style={mode === "dark" ? "light" : "dark"} />
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: colors.surface },
@@ -38,6 +59,6 @@ export default function RootLayout() {
           options={{ title: "Analisis sensitivitas" }}
         />
       </Stack>
-    </AppProvider>
+    </>
   );
 }

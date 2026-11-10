@@ -8,9 +8,9 @@ import {
   Row,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../src/components/ui";
-import { colors } from "../src/theme";
+import { useTheme, type ThemeColors } from "../src/theme";
 import { useApp } from "../src/state/AppContext";
 import { fmt } from "../src/utils/format";
 import { shareCSV } from "../src/utils/export";
@@ -30,6 +30,9 @@ import { shareResearchXLSX } from "../src/research/export";
 import { researchCSV } from "../src/research/xlsx";
 
 export default function Verification() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp();
   const [run, setRun] = useState<ResearchRun | null>(null);
   const [runs, setRuns] = useState<ResearchRun[]>([]);

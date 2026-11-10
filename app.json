@@ -5,12 +5,12 @@
     "owner": "naufalpakpahan",
     "version": "1.10.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "scheme": "distilab",
     "icon": "./assets/icon.png",
     "android": {
       "package": "id.distilab.app",
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#254E70"
@@ -23,12 +23,7 @@
         "android.permission.VIBRATE"
       ]
     },
-    "plugins": [
-      "expo-router",
-      "expo-status-bar",
-      "expo-sharing",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-status-bar", "expo-sharing", "expo-font"],
     "web": {
       "bundler": "metro",
       "output": "single"

@@ -1,4 +1,4 @@
-const C = {navy:'#15374B', teal:'#087F75', tealDark:'#05645D', mint:'#E4F3EE', bg:'#F5F8F9', white:'#FFFFFF', ink:'#183445', muted:'#6A7E89', border:'#DFE8ED', amber:'#D58C31', amberBg:'#FFF1D9', blue:'#397CB4', blueBg:'#EAF2FA', red:'#B85050'};
+const C = {navy:'#15374B', teal:'#087F75', tealDark:'#05645D', mint:'#E4F3EE', bg:'#F5F8F9', white:'#FFFFFF', ink:'#183445', muted:'#596F7C', border:'#DFE8ED', amber:'#D58C31', amberBg:'#FFF1D9', blue:'#397CB4', blueBg:'#EAF2FA', red:'#B85050'};
 function createKit() {
  const commands=[], links=[], frames={}; let serial=0;
  const ref=id=>({$ref:id});
@@ -38,21 +38,21 @@ function createKit() {
  function status(p){text(p,24,14,70,'9:41',13,C.ink,'Semibold',20);path(p,306,17,'M 0 8 L 0 6 M 4 8 L 4 4 M 8 8 L 8 2 M 12 8 L 12 0',C.ink,2);path(p,327,18,'M 0 2 Q 6 -3 12 2 M 3 5 Q 6 2 9 5 M 6 8 L 6.1 8',C.ink,1.5);rect(p,348,18,19,10,'none',3,C.ink,'Battery');rect(p,351,21,13,4,C.ink,1);rect(p,369,21,2,4,C.ink,1);}
  function screen(key,col,row){const name=key; const p=node('frame',null,col*458,180+row*956,390,844,name,{fill:C.bg,cornerRadius:28,clip:true});frames[key]=p;status(p);return p;}
  function header(p,kicker,title,back='01 Beranda'){
-  if(back){const b=box(p,20,52,36,36,C.white,12,C.border,'Back');icon(b,6,6,'back',C.ink,24);links.push([b,back]);}
+  if(back){const b=box(p,16,48,44,44,C.white,12,C.border,'Back');icon(b,10,10,'back',C.ink,24);links.push([b,back]);}
   text(p,back?68:24,50,280,kicker.toUpperCase(),10,C.teal,'Bold',16);
   text(p,back?68:24,69,300,title,22,C.ink,'Bold',33);
  }
  function nav(p,active='Beranda'){
   const g=box(p,0,764,390,80,C.white,0,null,'Navigation / Bottom');rect(g,0,0,390,1,C.border,0);
   const items=[['Beranda','home','01 Beranda'],['Riwayat','history','07 Riwayat'],['Metodologi','book','08 Metodologi']];
-  items.forEach(([label,ico,dest],i)=>{const n=box(g,i*130,5,130,57,'none',0,null,'Nav / '+label);if(label===active)rect(n,36,2,58,31,C.mint,16);icon(n,53,5,ico,label===active?C.teal:C.muted,24);text(n,0,35,130,label,10,label===active?C.teal:C.muted,label===active?'Semibold':'Regular',17,'center');links.push([n,dest]);});rect(g,137,70,116,4,C.ink,2);
+  items.forEach(([label,ico,dest],i)=>{const n=box(g,i*130,5,130,57,'none',0,null,'Nav / '+label);if(label===active)rect(n,36,2,58,31,C.mint,16);icon(n,53,5,ico,label===active?C.teal:C.muted,24);text(n,0,35,130,label,11,label===active?C.teal:C.muted,label===active?'Semibold':'Regular',17,'center');links.push([n,dest]);});rect(g,137,70,116,4,C.ink,2);
  }
  function workflow(p,active){
   const g=box(p,24,116,342,48,C.white,14,C.border,'Workflow');
   ['Proses','Data','Hasil'].forEach((v,i)=>{const selected=i===active; const n=box(g,4+i*112,4,110,40,selected?C.mint:'none',11,null,v);text(n,10,11,20,String(i+1).padStart(2,'0'),10,selected?C.teal:C.muted,'Bold',18);text(n,34,9,72,v,12,selected?C.teal:C.muted,selected?'Semibold':'Regular',22);links.push([n,['02 Proses','03 Data kasus','04 Hasil'][i]]);});
  }
  function card(p,x,y,w,h,name){return box(p,x,y,w,h,C.white,18,C.border,name);}
- function input(p,x,y,w,label,value,unit='',height=62){const g=box(p,x,y,w,height,C.white,12,C.border,'Input / '+label);text(g,12,8,w-24,label,10,C.muted,'Semibold',17);text(g,12,28,w-24,value,18,C.ink,'Semibold',26);if(unit)text(g,w-81,34,69,unit,10,C.muted,'Regular',17,'right');return g;}
+ function input(p,x,y,w,label,value,unit='',height=62){const g=box(p,x,y,w,height,C.white,12,C.border,'Input / '+label);text(g,12,8,w-24,label,11,C.muted,'Semibold',18);text(g,12,28,w-24,value,18,C.ink,'Semibold',26);if(unit)text(g,w-81,34,69,unit,11,C.muted,'Regular',18,'right');return g;}
  function metric(p,x,y,w,value,label,unit='',color=C.ink,h=94){const g=card(p,x,y,w,h,'Metric / '+label);text(g,14,10,w-28,label,10,C.muted,'Semibold',18);text(g,14,31,w-28,value,29,color,'Bold',42);if(unit)text(g,14,71,w-28,unit,10,C.muted,'Regular',16);return g;}
  function section(p,y,title,action=''){text(p,24,y,250,title,16,C.ink,'Semibold',25);if(action)text(p,276,y+3,90,action,11,C.teal,'Semibold',19,'right');}
  function hotspot(p,x,y,w,h,target,name='Hotspot'){const id=box(p,x,y,w,h,'none',0,null,name);links.push([id,target]);return id;}

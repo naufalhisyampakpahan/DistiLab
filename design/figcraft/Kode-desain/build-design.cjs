@@ -65,28 +65,35 @@ function columnDiagram(p,x,y,scale=1,small=false){
  } return g;
 }
 
-// 01 — Home
+// 01 — Home: one primary path; appearance stays secondary.
 {
  const p=screen('01 Beranda',0,0);
- const mark=box(p,24,54,42,42,C.teal,13,null,'Brand mark');icon(mark,9,8,'flask',C.white,24);
- text(p,77,52,208,'DistiLab',24,C.ink,'Bold',36);text(p,77,86,208,'VIRTUAL DISTILLATION LAB',8.5,C.muted,'Semibold',16);
- const about=box(p,326,58,40,36,C.white,12,C.border,'About methodology');icon(about,8,6,'book',C.teal,24);links.push([about,'08 Metodologi']);
- pill(p,24,126,116,'BELAJAR & RISET');
- text(p,24,166,342,'Dari proses ke\npemahaman.',30,C.ink,'Bold',88);
- text(p,24,263,330,'Eksplorasi pemisahan biner melalui\ndiagram, perhitungan, dan skenario.',14,C.muted,'Regular',46);
- const hero=box(p,24,330,342,168,C.navy,21,null,'Hero / Start a case');
- text(hero,20,18,220,'Satu kolom.\nBanyak kemungkinan.',19,C.white,'Semibold',58);
- text(hero,20,84,190,'Mulai dari parameter prosesmu.',11,'#BAD1D5','Regular',20);
- button(hero,18,116,216,'Kasus penelitian baru','02 Proses','primary','plus',38);
- // Abstract tray illustration, all geometry editable.
- rect(hero,270,30,45,97,'#2C5B67',21,'#66AE9E','Column motif');
- [50,67,84,101].forEach(y=>rect(hero,277,y,31,2,'#7FCDB5',1));
- vec(hero,250,19,'M 0 60 L 19 60 M 37 0 L 37 10 L 65 10 L 65 34','#90CDBC',2,'Flow motif');
- section(p,520,'Dua cara memahami kolom');
- [['McCabe–Thiele','Tahap demi tahap secara grafis.','chart'],['Fenske–Underwood–Gilliland','Estimasi cepat untuk desain awal.','layers']].forEach(([t,d,i],n)=>{
-  const c=card(p,24,558+n*79,342,68,t);const ic=box(c,12,13,42,42,n?C.blueBg:C.mint,13);icon(ic,9,9,i,n?C.blue:C.teal,24);text(c,66,11,260,t,n?13:15,C.ink,'Semibold',24);text(c,66,36,260,d,11,C.muted,'Regular',20);links.push([c,'03 Data kasus']);
+ const mark=box(p,24,52,42,42,C.teal,13,null,'Brand mark');icon(mark,9,8,'flask',C.white,24);
+ text(p,77,51,160,'DistiLab',24,C.ink,'Bold',36);
+ text(p,78,85,160,'LABORATORIUM DISTILASI',9,C.muted,'Semibold',16);
+ const dark=box(p,258,52,108,44,C.white,13,C.border,'Theme / Gelap');
+ vec(dark,13,11,'M 15 1 A 10 10 0 1 0 23 17 A 10 10 0 0 1 15 1',C.teal,1.8,'Theme / Moon');
+ text(dark,44,11,58,'Gelap',13,C.ink,'Semibold',22);
+ const light=box(p,258,52,108,44,C.white,13,C.border,'Theme / Terang');
+ vec(light,12,10,'M 12 7 A 5 5 0 1 1 12 17 A 5 5 0 1 1 12 7 M 12 0 L 12 3 M 12 21 L 12 24 M 0 12 L 3 12 M 21 12 L 24 12 M 4 4 L 6 6 M 18 18 L 20 20 M 4 20 L 6 18 M 18 6 L 20 4',C.teal,1.7,'Theme / Sun');
+ text(light,43,11,62,'Terang',13,C.ink,'Semibold',22);cmd('node.set',{ids:[ref(light)],props:{visible:false}});
+ text(p,24,135,342,'Simulasi distilasi,\nlebih mudah.',29,C.ink,'Bold',86);
+ text(p,24,230,342,'Pahami proses, atur parameter, lalu\nbandingkan hasil pemisahannya.',15,C.muted,'Regular',48);
+ const hero=box(p,24,306,342,186,C.navy,22,null,'Hero / Start a case');
+ text(hero,20,19,232,'Mulai eksplorasimu',20,C.white,'Semibold',32);
+ text(hero,20,61,222,'Dari campuran hingga\nkebutuhan tahap kolom.',14,'#C5DADC','Regular',46);
+ rect(hero,274,26,44,78,'#2C5B67',20,'#66AE9E','Column motif');
+ [45,61,77,93].forEach(y=>rect(hero,282,y,28,2,'#7FCDB5',1));
+ button(hero,18,120,306,'Mulai simulasi','02 Proses','primary','arrow',48);
+ text(p,24,510,342,'McCabe–Thiele · Fenske–Underwood–Gilliland',11,C.muted,'Regular',22,'center');
+ section(p,553,'Tiga langkah sederhana');
+ [['01','Proses','Kenali kolom'],['02','Data','Atur kondisi'],['03','Hasil','Baca analisis']].forEach(([n,t,d],i)=>{
+ const c=card(p,24+i*118,593,106,88,'Guide / '+t);
+ text(c,12,10,80,n,11,C.teal,'Bold',18);
+ text(c,12,31,82,t,15,C.ink,'Semibold',25);
+ text(c,12,60,84,d,11,C.muted,'Regular',18);
  });
- icon(p,26,726,'wifi',C.teal,20);text(p,55,727,290,'Bisa digunakan tanpa koneksi internet',11,C.muted,'Regular',20);
+ icon(p,72,719,'wifi',C.teal,24);text(p,103,719,230,'Siap dipakai tanpa internet',12,C.muted,'Regular',22);
  nav(p,'Beranda');
 }
 // 02 — Process
@@ -98,7 +105,7 @@ function columnDiagram(p,x,y,scale=1,small=false){
  columnDiagram(d,18,43,1,false);
  hotspot(d,25,169,118,58,'03 Data kasus','Feed → input');hotspot(d,228,96,105,91,'03 Data kasus','Distillate → input');
  const info=box(p,24,597,342,73,C.mint,14,null,'Model / Research profile');icon(info,13,13,'info',C.teal,24);text(info,49,10,275,'Model biner ideal',13,C.tealDark,'Semibold',23);text(info,49,34,275,'α konstan · CMO · umpan cair jenuh',11,C.tealDark,'Regular',22);
- button(p,24,690,342,'Lanjut ke data kasus','03 Data kasus');nav(p);
+ button(p,24,690,342,'Lanjut ke metode & data','03 Data kasus');nav(p);
 }
 // 03 — Input
 {
@@ -117,7 +124,7 @@ function columnDiagram(p,x,y,scale=1,small=false){
 function chartMcCabe(p,x,y,size){
  const g=box(p,x,y,size,size,'none',0,null,'Chart / McCabe–Thiele');
  const left=29,top=9,sz=size-43;const px=v=>left+v*sz, py=v=>top+(1-v)*sz;
- for(let i=0;i<=5;i++){const a=i/5;vec(g,0,0,`M ${px(a)} ${py(0)} L ${px(a)} ${py(1)}`,C.border,0.8,'Grid vertical');vec(g,0,0,`M ${px(0)} ${py(a)} L ${px(1)} ${py(a)}`,C.border,0.8,'Grid horizontal');text(g,px(a)-14,py(0)+7,28,a.toFixed(1),8,C.muted,'Regular',15,'center');text(g,0,py(a)-7,23,a.toFixed(1),8,C.muted,'Regular',15,'right');}
+ for(let i=0;i<=5;i++){const a=i/5;vec(g,0,0,`M ${px(a)} ${py(0)} L ${px(a)} ${py(1)}`,C.border,0.8,'Grid vertical');vec(g,0,0,`M ${px(0)} ${py(a)} L ${px(1)} ${py(a)}`,C.border,0.8,'Grid horizontal');text(g,px(a)-14,py(0)+7,28,a.toFixed(1),10,C.muted,'Regular',17,'center');text(g,0,py(a)-7,23,a.toFixed(1),8,C.muted,'Regular',15,'right');}
  const d=arr=>arr.map((pt,i)=>(i?'L':'M')+' '+px(pt[0]).toFixed(3)+' '+py(pt[1]).toFixed(3)).join(' ');
  const eq=Array.from({length:81},(_,i)=>{const a=i/80;return[a,2.5*a/(1+1.5*a)];});vec(g,0,0,d(eq),C.teal,2.3,'VLE / α = 2.5');
  const diag=vec(g,0,0,d([[0,0],[1,1]]),'#A8B7BE',1,'Diagonal / y = x');cmd('node.set',{ids:[ref(diag)],props:{dashes:[4,4]}});
@@ -126,7 +133,7 @@ function chartMcCabe(p,x,y,size){
  const q=vec(g,0,0,d([[z,0],[z,yp]]),C.blue,1,'q line');cmd('node.set',{ids:[ref(q)],props:{dashes:[3,3]}});
  let a=xd,v=xd;const steps=[[a,v]];for(let i=0;i<20;i++){const t=v/(2.5-1.5*v);steps.push([t,v]);if(t<xb)break;a=t;v=t>=z?m*t+b:ms*t+bs;steps.push([a,v]);}
  vec(g,0,0,d(steps),C.amber,1.9,'Stage staircase / C14');
- text(g,100,size-4,150,'x · fraksi mol cair',9,C.muted,'Regular',18,'center');
+ text(g,100,size-4,150,'x · fraksi mol cair',10,C.muted,'Regular',18,'center');
  return g;
 }
 // 04 — Result
@@ -141,8 +148,8 @@ function chartMcCabe(p,x,y,size){
  text(c,15,12,215,'Diagram McCabe–Thiele',14,C.ink,'Semibold',24);pill(c,263,11,64,'C14',C.mint,C.teal);
  chartMcCabe(c,13,43,242);
  // Legend is beside the plot's upper right, compact but readable.
- const legend=box(c,255,99,73,75,C.white,9,C.border,'Legend');[['VLE',C.teal],['Operasi',C.blue],['Tahap',C.amber]].forEach(([t,col],i)=>{rect(legend,7,15+i*20,11,2,col,1);text(legend,24,6+i*20,47,t,9,C.muted,'Regular',18);});
- text(c,16,303,310,'Umpan: tahap 6  ·  R = 1,65  ·  D/B = 50/50',10,C.muted,'Regular',18);
+ const legend=box(c,255,99,73,84,C.white,9,C.border,'Legend');[['VLE',C.teal],['Operasi',C.blue],['Tahap',C.amber]].forEach(([t,col],i)=>{rect(legend,7,17+i*24,11,2,col,1);text(legend,24,7+i*24,47,t,10,C.muted,'Regular',20);});
+ text(c,16,303,310,'Umpan 6 · R = 1,65 · D/B = 50/50',11,C.muted,'Regular',18);
  button(p,24,703,164,'Simpan studi','07 Riwayat','primary','save',43);button(p,202,703,164,'Sensitivitas','05 Sensitivitas','secondary','chart',43);
  nav(p);
 }

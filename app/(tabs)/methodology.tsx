@@ -1,3 +1,4 @@
+import { useTheme, type ThemeColors } from "../../src/theme";
 import { useState } from "react";
 import { Linking, Pressable, Text } from "react-native";
 import {
@@ -6,7 +7,7 @@ import {
   Row,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../../src/components/ui";
 import { ASSUMPTIONS, ENGINE_VERSION } from "../../src/types";
 const references = [
@@ -40,6 +41,9 @@ const references = [
   },
 ];
 export default function Methodology() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const [error, setError] = useState("");
   return (
     <Screen>

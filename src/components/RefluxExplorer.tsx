@@ -6,8 +6,8 @@ import { parseNumeric } from "../validation";
 import { fmt } from "../utils/format";
 import { McCabeChart } from "./McCabeChart";
 import { FUGGraph } from "../features/fug/FUGGraph";
-import { Button, Field, Metric, Note, styles } from "./ui";
-import { colors } from "../theme";
+import { Button, Field, Metric, Note, useStyles } from "./ui";
+import { useTheme, type ThemeColors } from "../theme";
 
 const bounded = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
@@ -23,6 +23,10 @@ export function RefluxSlider({
   max: number;
   onChange: (value: number) => void;
 }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+  const local = make_local(colors);
+
   const [width, setWidth] = useState(280);
   const latest = useRef({ min, max, onChange, width });
   latest.current = { min, max, onChange, width };
@@ -97,6 +101,10 @@ export function RefluxExplorer({
   profile: "research" | "general";
   onApply: (input: BinaryInput) => void;
 }) {
+  const { colors } = useTheme();
+  const styles = useStyles();
+  const local = make_local(colors);
+
   const [raw, setRaw] = useState(String(result.input.R));
   const [evaluated, setEvaluated] = useState(raw);
   useEffect(() => {
@@ -223,30 +231,31 @@ export function RefluxExplorer({
   );
 }
 
-const local = StyleSheet.create({
-  slider: { minHeight: 48, justifyContent: "center", width: "100%" },
-  track: {
-    position: "absolute",
-    height: 6,
-    left: 14,
-    right: 14,
-    borderRadius: 3,
-    backgroundColor: colors.border,
-  },
-  fill: {
-    position: "absolute",
-    height: 6,
-    left: 14,
-    borderRadius: 3,
-    backgroundColor: colors.accent,
-  },
-  thumb: {
-    position: "absolute",
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.primary,
-    borderWidth: 3,
-    borderColor: colors.surface,
-  },
-});
+const make_local = (colors: ThemeColors) =>
+  StyleSheet.create({
+    slider: { minHeight: 48, justifyContent: "center", width: "100%" },
+    track: {
+      position: "absolute",
+      height: 6,
+      left: 14,
+      right: 14,
+      borderRadius: 3,
+      backgroundColor: colors.border,
+    },
+    fill: {
+      position: "absolute",
+      height: 6,
+      left: 14,
+      borderRadius: 3,
+      backgroundColor: colors.accent,
+    },
+    thumb: {
+      position: "absolute",
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      backgroundColor: colors.primary,
+      borderWidth: 3,
+      borderColor: colors.surface,
+    },
+  });

@@ -7,7 +7,7 @@ import {
   Note,
   Screen,
   Section,
-  styles,
+  useStyles,
 } from "../src/components/ui";
 import { WorkflowNav } from "../src/components/WorkflowNav";
 import { ColumnDiagram, COLUMN_LABELS } from "../src/components/ColumnDiagram";
@@ -15,11 +15,14 @@ import type { ColumnPart } from "../src/components/ColumnDiagram";
 import { useApp } from "../src/state/AppContext";
 import { inspectFields } from "../src/utils/draft";
 import { parseNumeric } from "../src/validation";
-import { colors } from "../src/theme";
+import { useTheme, type ThemeColors } from "../src/theme";
 import type { BinaryInput } from "../src/types";
 import { methodName } from "../src/utils/format";
 
 export default function Process() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp();
   const [selected, setSelected] = useState<ColumnPart>();
   const partial = useMemo(() => {
@@ -80,7 +83,7 @@ export default function Process() {
               : "Data siap dihitung. Hasil belum tersedia sampai perhitungan dijalankan."}
         </Note>
         <Button
-          label="Buka data kasus"
+          label="Lanjut ke metode & data"
           icon="options-outline"
           onPress={() => router.replace("/input")}
         />

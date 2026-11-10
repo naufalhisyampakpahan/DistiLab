@@ -2,13 +2,15 @@ import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useApp } from "../state/AppContext";
-import { colors } from "../theme";
+import { useTheme, type ThemeColors } from "../theme";
 
 export function WorkflowNav({
   active,
 }: {
   active: "process" | "data" | "result";
 }) {
+  const { colors } = useTheme();
+
   const app = useApp();
   const steps = [
     {
@@ -28,7 +30,16 @@ export function WorkflowNav({
   return (
     <View
       accessibilityRole="tablist"
-      style={{ flexDirection: "row", gap: 6, marginBottom: 24 }}
+      style={{
+        flexDirection: "row",
+        gap: 4,
+        padding: 4,
+        backgroundColor: colors.surface,
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderRadius: 14,
+        marginBottom: 24,
+      }}
     >
       {steps.map((step) => {
         const selected = active === step.id,
@@ -45,25 +56,25 @@ export function WorkflowNav({
             onPress={() => router.replace(step.route)}
             style={{
               flex: 1,
-              minHeight: 52,
+              minHeight: 44,
               padding: 10,
               borderRadius: 12,
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
               gap: 5,
-              backgroundColor: selected ? colors.primary : colors.surface,
+              backgroundColor: selected ? colors.accentLight : colors.surface,
               opacity: disabled ? 0.45 : 1,
             }}
           >
             <Ionicons
               name={step.icon}
               size={18}
-              color={selected ? colors.surface : colors.primary}
+              color={selected ? colors.accent : colors.muted}
             />
             <Text
               style={{
-                color: selected ? colors.surface : colors.primary,
+                color: selected ? colors.accent : colors.muted,
                 fontSize: 14,
                 fontWeight: "600",
                 flexShrink: 1,

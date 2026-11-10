@@ -1,3 +1,4 @@
+import { useTheme, type ThemeColors } from "../../src/theme";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
@@ -8,7 +9,7 @@ import {
   Heading,
   Note,
   Screen,
-  styles,
+  useStyles,
 } from "../../src/components/ui";
 import { useApp } from "../../src/state/AppContext";
 import { calculationCSV } from "../../src/utils/csv";
@@ -16,6 +17,9 @@ import { shareCSV } from "../../src/utils/export";
 import { dateTime, fmt, methodName } from "../../src/utils/format";
 import { projectKey, projectTitle } from "../../src/storage/scenarios";
 export default function History() {
+  const { colors } = useTheme();
+  const styles = useStyles();
+
   const app = useApp();
   const [search, setSearch] = useState(""),
     [confirm, setConfirm] = useState<string | null>(null),
@@ -122,7 +126,9 @@ export default function History() {
             <Text style={styles.caption}>
               {methodName(study.result.method)} · {dateTime(study.createdAt)}
             </Text>
-            <Text style={{ fontSize: 24, color: "#254E70", fontWeight: "600" }}>
+            <Text
+              style={{ fontSize: 24, color: colors.primary, fontWeight: "600" }}
+            >
               {fmt(study.result.N)}{" "}
               <Text style={styles.caption}>
                 tahap · {study.result.Nceil} setelah pembulatan
